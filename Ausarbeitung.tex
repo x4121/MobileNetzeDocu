@@ -1,0 +1,57 @@
+\RequirePackage[l2tabu, orthodox]{nag}
+\documentclass[12pt,oneside,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[macros,accsupp,index]{acro}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage{todonotes}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage[left=3cm,right=4cm,top=3cm,bottom=6cm]{geometry}
+
+%%%%%%%%%%%%%%% Bibliographie
+%\usepackage[backend=biber,style=alphabetic,citestyle=alphabetic]{biblatex}
+%\renewcommand\refname{Quellen}
+%\addbibresource{Ausarbeitung.bib}
+
+% Make figures stay in their section
+\newcommand{\includeBarrier}[1]{\FloatBarrier\include{#1}\FloatBarrier}
+
+\input{acro}
+\def\picdir{../pics/}
+\setcounter{tocdepth}{2}
+\setlength{\parskip}{1ex}
+\setlength{\parindent}{0ex}
+\pagestyle{fancy}
+
+\title{Ausarbeitung Praktikum}
+\subtitle{Mobile Netze SS 2015}
+\author{Armin Grodon, Christian Gassner, Max Briglmeier,\\ Sebastian Bögl, Stefan Kuhn}
+
+
+
+\begin{document}
+	
+	\nocite{*}
+	\maketitle
+	\tableofcontents
+	\pagebreak
+	
+	\includeBarrier{openbts}
+	
+	\pagebreak
+	\printacronyms
+	
+%%%%%%%%%%%%%%% Bibliographie
+%\pagebreak
+%\printbibliography[heading=bibintoc]  
+	
+\end{document}
