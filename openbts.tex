@@ -1,1 +1,33 @@
 \section{OpenBTS}
+\label{sec:openbts}
+
+\subsection{Installation}
+\label{sec:installation}
+
+\subsection{Inbetriebnahme}
+\label{sec:inbetriebnahme}
+
+\subsection{Konfiguration}
+\label{sec:konfiguration}
+
+\subsection{Herausforderungen}
+Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begr\"u{\ss}t.\todo{Bild einf\"ugen}
+Über das OpenBTS-\CLI konnten die angemeldeten Teilnehmer mithilfe des Befehls \inlinecode{tmsis} anhand ihrer \IMSI identifiziert werden. Mit dem Befehl \inlinecode{sendsms <IMSI> <sourceAddress> <message text>} kann an die \emph{\IMSI} eine \SMS-Nachricht (\emph{message text}) mit dem Absender \emph{sourceAddress} versandt werden.
+
+Hierbei ließen sich bereits Inkonsistenzen in der Auslieferung der erstellten \SMS feststellen. Nach der erfolgreichen Integration von OpenBTS mit Asterisk verblieb sowohl die Auslieferungsrate von \SMS auf die hinterlegte Rufnummer auf einem niedrigen Niveau unter zehn Prozent als auch das erfolgreiche Pagen der Mobilteile.
+\subsubsection{Konsistenter Verbindungsaufbau}
+Nach tagelangem Konfigurieren ließ sich zwar keine Verbesserung in der Zustellrate von \SMS-Nachrichten und einem konsistenten Rufaufbau erzielen, dennoch führten die getätigten Beobachtungen letztendlich zur Fehlerfindung. Befand sich das zu pagende Gerät weiter entfernt als unser normaler Laborarbeitsplatz, so stieg die Zustellrate signifikant an.
+Die Ursache hierfür lag demnach in der zu hohen Sendeleistung der Basisstation.
+
+Durch ein Absenken der voreingestellten minimalen (\emph{GSM.MS.Power.Min}) und maximalen (\emph{GSM.MS.Power.Max}) Leistungsgrenzen in der Konfiguration von \SI{5}{dBm} beziehungsweise \SI{33}{dBm} auf \SI{0}{dBm} respektive \SI{1}{dBm} besserte sich der Verbindungsaufbau nochmals. 
+Die im Labor beste Verbindungsrate konnte durch ein zusätzliches Anbringen eines Dämpfungsglieds von \SI{10}{dB} an der Transmit-Antenne und der vorhin genannten Leistungsgrenzen erzielt werden.
+
+\subsubsection{Automatisierte Benutzeranmeldung}
+Wie in \autoref{sec:konfiguration} beschrieben, wurden die Teilnehmer mit deren \IMSI und gewünschter Telefonnummer in die Asterisk-Datenbank von Hand eingetragen. Selbst im Laborversuch mit einer geringen Geräteanzahl stellte sich dies als zu unkomfortabel heraus.
+Aus diesem Grund wurde die bestehende Funktionalität von OpenBTS und Asterisk über die Konfiguration entsprechend der Vorstellung der Gruppenmitgliedern angepasst.
+
+Die Willkommensnachricht weist die neuen Benutzer an, mit einer gewünschten Telefonnummer per \SMS zu antworten, damit ihnen diese zugeteilt werden kann. Wird eine bereits verwendete oder ungültige Rufnummer angegeben, so wird dies dem Benutzer wiederum per \SMS mitgeteilt.
+Erfolgt die Rufnummernbindung an die \IMSI, so wird in der Asterisk-Datenbank diese Zuordnung persistiert.
+
+\subsubsection{Aktualisierung der registrierten Benutzer}
+
