@@ -11,7 +11,10 @@
 	short = z.~B. ,
 	long  = zum Beispiel
 }
+\DeclareAcronym{IP}{short = IP, long = Internet Protocol}
 \DeclareAcronym{DNS}{short=DNS,long=Domain Name System}
+\DeclareAcronym{SRV}{short = SRV, long = Service Record}
+\DeclareAcronym{NAPTR}{short = NAPTR, long = Name Authority Pointer}
 \DeclareAcronym{ATCF}{short=ATCF,long=Access Transfer Control Function}
 \DeclareAcronym{ATGW}{short=ATGW,long=Access Transfer Gateway}
 \DeclareAcronym{CoAP}{short=CoAP,long=Constrained Application Protocol}
@@ -22,10 +25,15 @@
 \DeclareAcronym{IBCF}{short=I-BCF,long=Interconnection Border Control Function}
 \DeclareAcronym{IBGF}{short=I-BGF,long=Interconnection Border Gateway Function}
 \DeclareAcronym{ICSCF}{short=I-CSCF,long=Interrogating \acl*{CSCF}}
-\DeclareAcronym{IMMGW}{short=IM-MGW,long=\acs{IMS} Multi Media Gateway}
-\DeclareAcronym{IMS}{short=IMS,long=IP Multimedia (Core Network) Subsystems}
+\DeclareAcronym{MGW}{short = MGW, long = Media Gateway}
+\DeclareAcronym{IMMGW}{short=IM-MGW,long=\acs{IMS} Multi \acl*{MGW}}
+\DeclareAcronym{IMS}{short=IMS,long=\acs*{IP} Multimedia (Core Network) Subsystems}
 \DeclareAcronym{IMSSF}{short=IM-SSF,long=IP Multimedia Service Switching Function}
+\DeclareAcronym{MRF}{short = MRF, long = Media Resource Function}
+\DeclareAcronym{MRFC}{short = MRFC, long = Media Resource Function Controller}
+\DeclareAcronym{MRFP}{short = MRFP, long = Media Resource Function Processor}
 \DeclareAcronym{IoT}{short=IoT,long=Internet of Things}
+\DeclareAcronym{SGW}{short = SGW, long = Signalling Gateway}
 \DeclareAcronym{IPSMGW}{short=IP-SM-GW,long=IP Short Message Gateway}
 \DeclareAcronym{MGCF}{short=MGCF,long=Media Gateway Controller Function}
 \DeclareAcronym{MMTel}{short=MMTel,long=Multimedia Telephony Service}
@@ -39,6 +47,8 @@
 \DeclareAcronym{RFID}{short=RFID,long=radio-frequency identification}
 \DeclareAcronym{SCCAS}{short=SCC-AS,long=Service Centralization and Continuity Application Server}
 \DeclareAcronym{SCSCF}{short=S-CSCF,long=Serving \acl*{CSCF}}
+\DeclareAcronym{BGCF}{short = BGCF, long = Breakout Gateway Control Function}
+\DeclareAcronym{SLF}{short = SLF, long = Subscriber Locator Function}
 \DeclareAcronym{SIP}{short=SIP,long=Session Initiation Protocol}
 \DeclareAcronym{XMPP}{short=XMPP,long=Extensible Messaging and Presence Protocol}
 \DeclareAcronym{GPP}{short = 3GPP, long = 3rd Generation Partnership Project}
@@ -54,10 +64,42 @@
 \DeclareAcronym{PES}{short = PES, long = \acs*{PSTN} Emulation Service}
 \DeclareAcronym{CDMA}{short = CDMA, long = Code Division Multiple Access}
 \DeclareAcronym{TDMA}{short = TDMA, long = Time Division Multiple Access}
+\DeclareAcronym{CDMAtwoK}{short = CDMA2000, long = Code Division Multiple Access 2000}
 \DeclareAcronym{WLAN}{short = WLAN, long = Wireless Local Area Network}
 \DeclareAcronym{LAN}{short = LAN, long = Local Area Network}
 \DeclareAcronym{SAE}{short = SAE, long = System Architecture Evolution}
 \DeclareAcronym{LTE}{short = LTE, long = Long-Term Evolution}
 \DeclareAcronym{EPS}{short = EPS, long = Evolved Packet System}
 \DeclareAcronym{SMS}{short = SMS, long = Short Message Service}
+\DeclareAcronym{VoIP}{short = VoIP, long = Voice over \acs*{IP}}
+\DeclareAcronym{VoLTE}{short = VoLTE, long = Voice over \acs*{LTE}}
+\DeclareAcronym{WiMAX}{short = WiMAX, long = Worldwide Interoperability for Microwave Access}
+\DeclareAcronym{WCDMA}{short = WCDMA, long = Wideband \acl*{CDMA}}
+\DeclareAcronym{ISDN}{short = ISDN, long = Integrated Service Digital Network}
+\DeclareAcronym{MSISDN}{short = MSISDN, long = Mobile Subscriber \acl*{ISDN}}
+\DeclareAcronym{DSL}{short = DSL, long = Digital Subscriber Line}
+\DeclareAcronym{ISUP}{short = ISUP, long = \acs*{ISDN} User Part}
+\DeclareAcronym{IMPI}{short = IMPI, long = \acs*{IP} Multimedia Private Identity}
+\DeclareAcronym{IMPU}{short = IMPU, long = \acs*{IP} Multimedia Public Identity}
+\DeclareAcronym{GRUU}{short = GRUU, long = Globally Routable User Agent URI}
+\DeclareAcronym{UPSF}{short = UPSF, long = User Profile Server Function}
+\DeclareAcronym{HLR}{short = HLR, long = Home Location Register}
+\DeclareAcronym{AuC}{short = AuC, long = Authentication Center}
+\DeclareAcronym{URI}{short = URI, long = Uniform Resource Identifier}
+\DeclareAcronym{ULI}{short = URL, long = Uniform Resource Locator}
+\DeclareAcronym{UE}{short = UE, long = User Equipment}
+\DeclareAcronym{DHCP}{short = DHCP, long = Dynamic Host Configuration Protocol}
+\DeclareAcronym{IPsec}{short = IPsec, long = \acl*{IP} Security}
+\DeclareAcronym{TLS}{short = TLS, long = Transport Layer Security}
+\DeclareAcronym{IMSI}{short = IMSI, long = International Mobile Subscriber Identity}
+\DeclareAcronym{IMEI}{short = IMEI, long = International Mobile Station Equipment Identity}
+\DeclareAcronym{SIM}{short = SIM, long = Subscriber Identity Module}
+\DeclareAcronym{ENUM}{short = ENUM, long = Electronic Numbering}
+\DeclareAcronym{AS}{short = AS, long = Application Server}
+\DeclareAcronym{CS}{short = CS, long = Circuit Switched}
+\DeclareAcronym{MTP}{short = MTP, long = Message Transfer Part}
+\DeclareAcronym{PCM}{short = PCM, long = Pulse-Code Modulation}
+\DeclareAcronym{RTP}{short = RTP, long = Real-time Transport Protocol}
+\DeclareAcronym{AMR}{short = AMR, long = Adaptive Multi-Rate}
+\DeclareAcronym{SCTP}{short = SCTP, long = Stream Control Transmission Protocol}
 
