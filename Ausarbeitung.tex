@@ -23,13 +23,10 @@
 %\renewcommand\refname{Quellen}
 %\addbibresource{Ausarbeitung.bib}
 
-% Make figures stay in their section
-\newcommand{\includeBarrier}[1]{\FloatBarrier\include{#1}\FloatBarrier}
-
 \newcommand{\inlinecode}[1]{\texttt{#1}}
 
 \input{acro}
-\def\picdir{../pics/}
+\def\picdir{pics/}
 \setcounter{tocdepth}{2}
 \setlength{\parskip}{1ex}
 \setlength{\parindent}{0ex}
@@ -48,7 +45,8 @@
 	\tableofcontents
 	\pagebreak
 	
-	\includeBarrier{openbts}
+	\include{openbts}
+	\include{backend}
 	
 	\pagebreak
 	\printacronyms

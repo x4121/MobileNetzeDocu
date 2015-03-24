@@ -1,0 +1,35 @@
+@startuml
+
+class BTSUser << (S,lightblue) >> {
+qint32 id
+QString imsi
+QString number
+QString name
+
+toJsonObject() : QJsonObject
+{static} fromJsonObject(QJsonObject) : BTSUser
+{static} fromSqlQuery(QSqlQuery) : BTSUser
+}
+
+class Socket {
+newConnection()
+processTextMessage(QString message)
+
+-DataBase db
+-QWebSocketServer m_socketserver
+}
+
+class Database{
+readUsers() : QList<BTSUser>
+readUsersWithTimeStamp() : QList<QPair<BTSUser, qlonglong>>
+readUsers(const QVariantList) : QList<BTSUser>
+updateUser(BTSUser);
+deleteUser(qint32);
+createUserTable();
+
+-QSqlDatabase db;
+-QSqlDatabase db_tmsi;
+}
+
+Socket -- Database	
+@enduml

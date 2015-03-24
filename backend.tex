@@ -1,0 +1,29 @@
+\section{OpenBTS Webservice Backend}
+
+Das Backend für die Webanwendung wurde in C++ in Verbindung mit der Bibliothek Qt\footnote{Qt-Project: \url{http://qt project.org/}} erstellt. Diese wurde gewählt, da sie alle wichtigen Implementierungen, die in diesem Projekt verwendet wurden, mitbringt. Die genutzten Bibliotheken sind vor allem die Unterstützung von Websockets mit \JSON, sowie eine gute Datenbankanbindung. Da die Websocket Implementierung erst seit der neuen Version 5.4 verfügbar sind muss diese oder eine höhere genutzt werden. Zum Übersetzen wurde C++11 verwendet, was allerdings in der Projektkonfiguration bereits voreingestellt ist.
+
+\subsection{Anforderungen}
+
+Aufgabe des Backends ist es Befehle in Form von \JSON Nachrichten der Weboberfläche entgegenzunehmen und daraus resultierend entweder einen Datenbankzugriff durchzuführen oder einen Befehl mit Hilfe des \CLI an die OpenBTS Software zu schicken.
+
+Die Befehle, die unterstützt werden sollen sind:
+
+\begin{itemize}
+	\item Alle Benutzter abrufen
+	\item Name und Telefonnummer eines Benutzers setzen bzw. verändern
+	\item Einen Benutzer löschen
+	\item Eine \SMS verschicken
+\end{itemize}
+
+\subsection{Architektur}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{\picdir backend_uml.png}
+	\caption{UML Klassendiagramm}
+	\label{uml_class}
+\end{figure}
+
+\subsubsection{Class Socket}
+
+\subsubsection{Class DataBase}
