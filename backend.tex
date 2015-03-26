@@ -1,6 +1,6 @@
 \section{OpenBTS Webservice Backend}
 
-Das Backend für die Webanwendung wurde in C++ in Verbindung mit der Bibliothek Qt\footnote{Qt-Project: \url{http://qt project.org/}} erstellt. Diese wurde gewählt, da sie alle wichtigen Implementierungen, die in diesem Projekt verwendet wurden, mitbringt. Die genutzten Bibliotheken sind vor allem die Unterstützung von Websockets mit \JSON, sowie eine gute Datenbankanbindung. Da die Websocket Implementierung erst seit der neuen Version 5.4 verfügbar sind muss diese oder eine höhere genutzt werden. Zum Übersetzen wurde C++11 verwendet, was allerdings in der Projektkonfiguration bereits voreingestellt ist.
+Das Backend für die Webanwendung wurde in C++ in Verbindung mit der Bibliothek Qt\footnote{Qt-Project: \url{http://qt project.org/}} erstellt. Diese wurde gewählt, da sie alle wichtigen Implementierungen, die in diesem Projekt verwendet wurden, mitbringt. Die genutzten Bibliotheken sind vor allem die Unterstützung von Websockets mit \JSON, sowie eine gute Datenbankanbindung. Da die Websocket Implementierung erst seit der neuen Version 5.4 verfügbar ist muss diese oder eine höhere genutzt werden. Zum Übersetzen wird C++11 verwendet, was allerdings in der Projektkonfiguration bereits voreingestellt ist. Auf der Webseite \url{http://doc.qt.io/qt-5/} sind verschiedene Dokumentation, unter anderem der \API für Qt abrufbar.
 
 \subsection{Anforderungen}
 
@@ -12,18 +12,65 @@ Die Befehle, die unterstützt werden sollen sind:
 	\item Alle Benutzter abrufen
 	\item Name und Telefonnummer eines Benutzers setzen bzw. verändern
 	\item Einen Benutzer löschen
-	\item Eine \SMS verschicken
+	\item Eine oder mehrere \SMS verschicken
 \end{itemize}
 
 \subsection{Architektur}
 
+Das Backend akzeptiert \JSON Anfragen über ein Websocket und verarbeitet diese entsprechend. Um Einstellungen für das Programm, wie beispielsweise die Pfade der Datenbanken oder den \SMS Befehl vorzugeben wird die Qt Klasse \textit{QSettings} verwendet, mit der die Einstellungen in einer Datei verwaltet werden können. Dabei stehen die jeweiligen Einstellungen als Klartext in der Datei, sodass diese bei Bedarf vor dem Start des Backends von Hand angepasst werden können.
+
+Für das Backend wurden zwei Klassen und eine Struktur implementiert. Diese sind mit den relevanten Methoden in Abbildung \ref{fig:uml_class} als \UML Klassendiagramm dargestellt.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.8\textwidth]{\picdir backend_uml.png}
-	\caption{UML Klassendiagramm}
-	\label{uml_class}
+	\caption{OpenBTS Webservice Backend Architektur}
+	\label{fig:uml_class}
 \end{figure}
 
-\subsubsection{Class Socket}
+\subsubsection*{Main Methode}
 
-\subsubsection{Class DataBase}
+In der Main Methode wird zu Beginn getestet, ob bereits eine \textit{settings.ini} Datei mit den Einstellungen für das Backend existiert. Ist dies nicht der Fall wird zuallererst eine Datei mit voreingestellten Standartwerten erzeugt. Anschließend wird ein Objekt der Klasse Socket (siehe \ref{sssec:classsocket}) mit dem Port aus den Einstellungen instantiiert. Zum Abschluss wird die Qt eigene Event Loop (siehe \textit{QCoreApplication}) gestartet, durch die der weitere Programmablauf geregelt wird.
+
+\subsubsection*{Struktur BTSUser}
+Die Struktur dient als Transportklasse für einen einzelnen User des OpenBTS Systems. Sie beinhaltet neben den Objektvariablen zwei Helfermethoden, die zum Erzeugen der Objekte aus \JSON oder einem Datenbankeintrag dienen sowie eine weitere Methode, die das Objekt in ein \textit{QJsonObject} umwandelt.
+
+
+\subsubsection*{Klasse Socket}
+\label{sssec:classsocket}
+Ein Objekt der Klasse Socket ist das Herzstück dieser Anwendung. Es öffnet beim Erzeugen einen \textit{QWebSocket} auf dem übergebenen Port und verbindet die entsprechenden Signale über das Qt eigene Signal \& Slot Prinzip mit den dafür vorgesehenen Funktionen.
+
+Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnection()} aufgerufen, welche die neue Verbindung akzeptiert, zur Liste der bekannten Clients hinzufügt und die Verbindung zur \inlinecode{processTextMessage(QString)} Methode erzeugt. Diese wird aufgerufen, sobald eine neue Nachricht vom Client empfangen wird. Diese Nachricht wird nun zuerst in ein \textit{QJsonDocument} Objekt geparst und anschließend die zum Befehl passende Methode ausgeführt.
+\todo{text}
+
+
+\subsubsection*{Klasse DataBase}
+
+Die Klasse \textit{DataBase} kapselt alle Zugriffe auf die verwendeten Datenbanken. Hierzu wird die Qt interne Bibliotheksklasse \textit{QSQLDatabase} verwendet. Diese bietet unter anderen Unterstützung für die, unter OpenBTS verwendeten SQLite3 Datenbanken. Die jeweiligen Anfragen werden durch \SQL Querys ausgeführt, die mit Hilfe von \textit{Prepared Statements} erzeugt werden.
+
+OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien. In diesem Projekt sind davon die Dateien \textit{sqlite3.db} und \textit{TMSITable.db} relevant. Diese sind schematisch in Abbildung \ref{fig:database_er} dargestellt und im Folgenden näher erläutert.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.5]{\picdir backend_er_sqlite.png} \\
+	\includegraphics[scale=0.5]{\picdir backend_er_tmsi.png}
+	\caption{Benutzte Tabellen als ER Diagramm}
+	\label{fig:database_er}
+\end{figure}
+
+
+\paragraph{\textit{sqlite3.db}} enthält grundlegende Informationen über alle registrierten Geräte. Dafür werden von OpenBTS bzw. Asterisk zwei Tabellen benutzt. Daneben wurde für dieses Projekt eine neue hinzugefügt:
+
+\begin{itemize}
+	\item \textit{SIP\_BUDDIES} enthält alle wichtigen Informationen zu einem Gerät, wie \IMSI, \todo{ff}
+	\item \textit{DIALTABLE\_DATA} enthält die Zuordnungen von \IMSI zu der realen Telefonnummer vermerkt. Für die Zuordnung der Datensätze wird in dieser Datenbank das eindeutige Feld \textit{id} verwendet.
+	
+	\item \textit{USERNAME} wurde für die Zuordnung von Realnamen neu eingeführt. Sie wird beim Starten der Anwendung mit dem \SQL Befehl \inlinecode{CREATE TABLE IF NOT EXISTS}  erzeugt, falls sie noch nicht existiert. In ihr ist lediglich die Zuordnung der \textit{id} zu einem Realnamen vermerkt. Da beim Aktualisieren nicht sichergestellt ist, dass der Eintrag mit dieser \textit{id} bereits vorhanden ist, wird zuerst der Befehl \inlinecode{UPDATE} ausgeführt, der keine Änderung bewirkt, wenn der Eintrag nicht existiert. Anschließend wird \inlinecode{INSERT OR IGNORE} mit denselben Daten ausgeführt um den Eintrag anzulegen falls er noch nicht vorhanden war.
+\end{itemize}
+
+
+
+
+
+\paragraph{\textit{TMSITable.db}} hält Informationen über aktive bzw. kürzlich angemeldete Geräte. Zu diesem Zweck enthält die Tabelle \textit{TMSI\_Table} unter anderem die \IMSI und die zugewiesene \TMSI sowie den Zeitpunkt des letzten Zugriffs als Unix Zeitstempel. Diese Datenbankdatei muss zwingend mit einem \textit{Read-only} Flag geöffnet und nach auslesen sofort wieder geschlossen werden, da ansonsten Probleme mit OpenBTS auftreten können.
+
+
