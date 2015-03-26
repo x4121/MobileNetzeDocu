@@ -22,7 +22,7 @@ processTextMessage(QString message)
 class Database{
 readUsers() : QList<BTSUser>
 readUsersWithTimeStamp() : QList<QPair<BTSUser, qlonglong>>
-readUsers(const QVariantList) : QList<BTSUser>
+readUsers(QList<qint32>) : QList<BTSUser>
 updateUser(BTSUser);
 deleteUser(qint32);
 createUserTable();

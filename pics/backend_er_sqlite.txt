@@ -1,0 +1,35 @@
+@startuml
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <u>x</u>
+
+hide methods
+hide stereotypes
+left to right direction
+
+package sqlite3.db <<Database>> {
+	table(DIALDATA_TABLE) {
+		primary_key(int id)
+		varchar extern
+		varchar dial
+	}
+
+	table(USERNAME) {
+		primary_key(int id)
+		varchar username
+	}
+
+	table(SIP_BUDDIES) {
+		primary_key(int id)
+		varchar name
+		varchar callerid
+		varchar username
+		...
+	}
+
+	DIALDATA_TABLE "1" -- "0,1" USERNAME
+	DIALDATA_TABLE "1" -- "1" SIP_BUDDIES
+	SIP_BUDDIES "1" -- "0,1" USERNAME
+}
+
+@enduml
