@@ -11,29 +11,29 @@
 \label{sec:konfiguration}
 
 \subsection{Herausforderungen}
-Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begr\"u{\ss}t.\todo{Bild einf\"ugen}
+Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begrüßt.\todo{Bild einfügen}
 Über das OpenBTS-\CLI konnten die angemeldeten Teilnehmer mithilfe des Befehls \inlinecode{tmsis} anhand ihrer \IMSI identifiziert werden. Mit dem Befehl \inlinecode{sendsms <IMSI> <sourceAddress> <message text>} kann an die \emph{\IMSI} eine \SMS-Nachricht (\emph{message text}) mit dem Absender \emph{sourceAddress} versandt werden.
 
-Hierbei ließen sich bereits Inkonsistenzen in der Auslieferung der erstellten \SMS feststellen. Nach der erfolgreichen Integration von OpenBTS mit Asterisk verblieb sowohl die Auslieferungsrate von \SMS auf die hinterlegte Rufnummer auf einem niedrigen Niveau unter zehn Prozent als auch das erfolgreiche Pagen der Mobilteile.
+Hierbei ließen sich bereits Inkonsistenzen in der Auslieferung der erstellten \SMS feststellen. Nach der erfolgreichen Integration von OpenBTS mit Asterisk verblieb sowohl die Auslieferungsrate von \SMS-Nachrichten auf die hinterlegte Rufnummer auf einem niedrigen Niveau unter zehn Prozent als auch das erfolgreiche Pagen der Mobilteile.
 \subsubsection{Konsistenter Verbindungsaufbau}
-Nach tagelangem Konfigurieren ließ sich zwar keine Verbesserung in der Zustellrate von \SMS-Nachrichten und einem konsistenten Rufaufbau erzielen, dennoch führten die getätigten Beobachtungen letztendlich zur Fehlerfindung. Befand sich das zu pagende Gerät weiter entfernt als unser normaler Laborarbeitsplatz, so stieg die Zustellrate signifikant an.
+Nach tagelangem Konfigurieren ließ sich zwar keine Verbesserung in der Zustellrate von \SMS-Nachrichten und einem konsistenten Rufaufbau erzielen, dennoch führten die getätigten Beobachtungen letztendlich zur Fehlerfindung. War das zu pagende Gerät weiter entfernt als unser normaler Laborarbeitsplatz, so stieg die Zustellrate signifikant an.
 Die Ursache hierfür lag demnach in der zu hohen Sendeleistung der Basisstation.
 
-Durch ein Absenken der voreingestellten minimalen (\emph{GSM.MS.Power.Min}) und maximalen (\emph{GSM.MS.Power.Max}) Leistungsgrenzen in der Konfiguration von \SI{5}{dBm} beziehungsweise \SI{33}{dBm} auf \SI{0}{dBm} respektive \SI{1}{dBm} besserte sich der Verbindungsaufbau nochmals. 
-Die im Labor beste Verbindungsrate konnte durch ein zusätzliches Anbringen eines Dämpfungsglieds von \SI{10}{dB} an der Transmit-Antenne und der vorhin genannten Leistungsgrenzen erzielt werden.
+Durch ein Absenken der voreingestellten minimalen (\emph{GSM.MS.Power.Min}) und maximalen (\emph{GSM.MS.Power.Max}) Leistungsgrenzen in der Konfiguration von \SI{5}{dBm} beziehungsweise \SI{33}{dBm} auf \SI{0}{dBm} respektive \SI{1}{dBm} verbesserte sich der Verbindungsaufbau nochmals. 
+Die im Labor beste Verbindungsrate konnte durch das zusätzliche Anbringen eines Dämpfungsglieds von \SI{10}{dB} an der Transmit-Antenne und der vorhin genannten Leistungsgrenzen erzielt werden.
 
 \subsubsection{Automatisierte Benutzeranmeldung}
 Wie in \autoref{sec:konfiguration} beschrieben, wurden die Teilnehmer mit deren \IMSI und gewünschter Telefonnummer in die Asterisk-Datenbank von Hand eingetragen. Selbst im Laborversuch mit einer geringen Geräteanzahl stellte sich dies als zu unkomfortabel heraus.
 Aus diesem Grund wurde die bestehende Funktionalität von OpenBTS und Asterisk über die Konfiguration entsprechend der Vorstellung der Gruppenmitgliedern angepasst.
 
-Die Willkommensnachricht weist die neuen Benutzer an, mit einer gewünschten Telefonnummer per \SMS zu antworten, damit ihnen diese zugeteilt werden kann. Wird eine bereits verwendete oder ungültige Rufnummer angegeben, so wird dies dem Benutzer wiederum per \SMS mitgeteilt.
+Die Willkommensnachricht weist die neuen Benutzer an, mit einer gewünschten Telefonnummer per \SMS-Nachricht zu antworten, damit ihnen diese zugeteilt werden kann. Wird eine bereits verwendete oder ungültige Rufnummer angegeben, so wird dies dem Benutzer wiederum per \SMS-Nachricht mitgeteilt.
 Erfolgt die Rufnummernbindung an die \IMSI, so wird diese Zuordnung in der Asterisk-Datenbank in \emph{/var/lib/asterisk/sqlite3dir/sqlite3.db} persistiert.
 
 \subsubsection{Aktualisierung der registrierten Benutzer}
 Die zu erstellende Anwendung (siehe \todo{add section reference}) fordert eine Aktualisierung der aktiv angemeldeten Benutzer. Dies stellt eine vereinfachte Form eines Präsenzdienstes darstellt.\\
 Die bestehende Konfiguration aus \autoref{sec:konfiguration} widerspricht mit den voreingestellten Standardwerten klar dieser Forderung. 
-Im Labor wurden inaktive Geräte nicht auf Existenz überprüft, d.~h. solange ein \UE nicht selbständig aktiv eine Verbindung aufbaute, wurde die zugehörige \IMSI in der Ausgabe des \inlinecode{tmsis}-Befehls nicht aktualisiert. Um diese Malaise zu mindern, werden die folgenden Parameter angepasst.\\
+Im Labor wurden inaktive Geräte nicht auf Existenz überprüft, d.~h. solange ein \UE nicht selbständig aktiv eine Verbindung aufbaute, wurde die zugehörige \IMSI in der Ausgabe des \inlinecode{tmsis}-Befehls nicht aktualisiert. Um diese Malaise \todo{eine was?} zu mindern, werden die folgenden Parameter angepasst.\\
 Mit einem Konfigurationswert \inlinecode{1} für \inlinecode{Control.LUR.QueryIMEI} wird von jeder Mobilstation bei einem initialen \LUR die \IMEI abgefragt.\\
-Durch das Setzten von \inlinecode{Control.LUR.SendTMSIs} auf \inlinecode{1} werden neue \TMSI-Zuweisungen an die Mobilgeräte gesendet, die sich im Netzwerk anmelden dürfen (siehe \autoref{sec:konfiguration} \inlinecode{Control.LUR.OpenRegistration}). Diese Änderungen werden in die \TMSI-Datenbank gespeichert, die über das Konfigurationselement \inlinecode{Control.Reporting. TMSITable} eingestellt werden kann, und können somit direkt aus der Datenbank ausgelesen werden oder über die Ausgabe des Befehls \inlinecode{tmsis}.\\
+Durch das Setzten von \inlinecode{Control.LUR.SendTMSIs} auf \inlinecode{1} werden neue \TMSI-Zuweisungen an die Mobilgeräte gesendet, die sich im Netzwerk anmelden dürfen (siehe \autoref{sec:konfiguration} \inlinecode{Control.LUR.OpenRegistration}). Diese Änderungen werden in die \TMSI-Datenbank gespeichert, die über das Konfigurationselement \inlinecode{Control.Reporting.\allowbreak TMSITable} eingestellt werden kann, und können somit direkt aus der Datenbank ausgelesen werden oder über die Ausgabe des Befehls \inlinecode{tmsis}.\\
 Des Weiteren muss der Zeitschritt für die Registrierungsgültigkeit in Minuten \inlinecode{GSM.Timer.T3212} konfiguriert werden, der auf ein vielfaches von sechs und mindestens dieselbe Zahl gestellt werden kann. Da die Konfigurationsoption \inlinecode{SIP.RegistrationPeriod}, die eine Registrierungszeitspanne in Minuten angibt, echt größer dem \inlinecode{GSM.Timer.T3212}-Wert sein muss, wird diese auf 7 [Minuten] und der letztgenannte auf 6 [Minuten] festgelegt.\\
 Mit dieser veränderten Konfiguration werden inaktive Mobilgeräte nach spätestens sieben Minuten als \emph{außer Reichweite} oder \emph{im Stand-by} erkannt, womit der Präsenzdienst seine Funktion mit einer zeitlichen Untergrenze von eben erwähnten sieben Minuten erfüllen kann.
