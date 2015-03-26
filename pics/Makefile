@@ -6,7 +6,7 @@ PNGS=$(SRCS:.txt=.png)
 
 all: $(PNGS)
 %.png: %.txt
-	$(PUML) $(OUTT) $<
+	$(PUML) $(OUTT) -charset UTF-8 $<
 
 clean:
 	rm -f $(PNGS)
