@@ -1,10 +1,12 @@
 OUTT = -tpng
 PUML = java -jar plantuml.jar
 
-all: backend_uml.png usecases_uml.png
+SRCS=$(wildcard *.txt)
+PNGS=$(SRCS:.txt=.png)
 
+all: $(PNGS)
 %.png: %.txt
 	$(PUML) $(OUTT) $<
 
-clear:
-	rm -f *.png
+clean:
+	rm -f $(PNGS)
