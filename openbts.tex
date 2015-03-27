@@ -1,17 +1,18 @@
+\section{Aufgabenstellung}
+\label{sec:aufgabe}
+
+Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetz mit GSM.
+Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research}\footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit OpenBTS ein \GSM-Netz aufsetzten.
+
 \section{OpenBTS}
 \label{sec:openbts}
 
-% Software-Defined Radio Platform
-% Ettus Research USRP 2 
-% Ubuntu 14.04
-
-Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetz mit GSM.
-Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research} \footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit OpenBTS ein \GSM-Netz aufsetzten.
+OpenBTS\footnote{\url{http://openbts.org}} ist ein open source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
 
 \subsection{Installation}
 \label{sec:installation}
 
-Zur Installation und initialen Einrichtung von OpenBTS haben wir uns weitestgehend an die Anleitung des auf \url{http://openbts.org} verlinkten Git-Repository \footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
+Zur Installation und initialen Einrichtung von OpenBTS haben wir uns weitestgehend an die Anleitung des OpenBTS-Git-Repository\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
 Abhängigkeiten auf den Laborrechner geklont, den aktuellen Branch ausgewählt und kompiliert.
 
 \begin{lstlisting}[language=bash]
