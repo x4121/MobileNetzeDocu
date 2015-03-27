@@ -13,20 +13,28 @@ OpenBTS\footnote{\url{http://openbts.org}} ist ein open source Softwareprojekt m
 \label{sec:installation}
 
 Zur Installation und initialen Einrichtung von OpenBTS haben wir uns weitestgehend an die Anleitung des OpenBTS-Git-Repository\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
-Abhängigkeiten auf den Laborrechner geklont, den aktuellen Branch ausgewählt und kompiliert.
+Abhängigkeiten auf den Laborrechner geklont, den aktuellen Branch ausgewählt und für unsere \USRP kompiliert.\\Während dem Kompilieren fiel auf, dass anscheinend nicht alle benötigten Treiber mit dem Repository geladen und installiert werden. Dies ließ sich aber auch durch eine kurze Google-Suche beheben\footnote{\url{http://code.ettus.com/redmine/ettus/projects/uhd/wiki/UHD_Linux}}.
 
 \begin{lstlisting}[language=bash]
+sudo apt-get install git
 git clone http://github.com/RangeNetworks/dev
 cd dev
 ./clone.sh
 ./switchto.sh master
-./build.sh
+sudo bash -c 'echo "deb \
+http://files.ettus.com/binaries/uhd/
+repo/uhd/ubuntu/`lsb_release \
+-cs` `lsb_release -cs` main" >
+/etc/apt/sources.list.d/ettus.list'
+sudo apt-get update
+sudo apt-get install -t `lsb_release -cs` uhd
+./build.sh N210
 \end{lstlisting}
 
 Nachdem die einzelnen Komponenten kompiliert wurden, konnte man diese und die dazu benötigten Abhängigkeiten auf dem Laborrechner installieren.
 
 \begin{lstlisting}
-cd BUILD-*
+cd BUILD/*
 sudo dpkg -i *.deb
 sudo apt-get -f install
 \end{lstlisting}
