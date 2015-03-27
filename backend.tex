@@ -39,8 +39,7 @@ Die Struktur dient als Transportklasse für einen einzelnen User des OpenBTS Sys
 \label{sssec:classsocket}
 Ein Objekt der Klasse Socket ist das Herzstück dieser Anwendung. Es öffnet beim Erzeugen einen \textit{QWebSocket} auf dem übergebenen Port und verbindet die entsprechenden Signale über das Qt eigene Signal \& Slot Prinzip mit den dafür vorgesehenen Funktionen.
 
-Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnection()} aufgerufen, welche die neue Verbindung akzeptiert, zur Liste der bekannten Clients hinzufügt und die Verbindung zur \inlinecode{processTextMessage(QString)} Methode erzeugt. Diese wird aufgerufen, sobald eine neue Nachricht vom Client empfangen wird. Diese Nachricht wird nun zuerst in ein \textit{QJsonDocument} Objekt geparst und anschließend die zum Befehl passende Methode ausgeführt.
-\todo{text}
+Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnection()} aufgerufen, welche die neue Verbindung akzeptiert, zur Liste der bekannten Clients hinzufügt und die Verbindung zur \inlinecode{processTextMessage(QString)} Methode erzeugt. Diese wird aufgerufen, sobald eine neue Nachricht vom Client empfangen wird. Diese Nachricht wird nun zuerst in ein \textit{QJsonDocument} Objekt geparst und anschließend die zum Befehl passende Methode ausgeführt. Eine Übersicht über die erlaubten Befehle und eine kurze Beschreibung jeweils ist im Abschnitt \ref{subsec:json} zu finden.
 
 
 \subsubsection*{Klasse DataBase}
@@ -72,14 +71,16 @@ OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien.
 \paragraph{\textit{TMSITable.db}} hält Informationen über aktive bzw. kürzlich angemeldete Geräte. Zu diesem Zweck enthält die Tabelle \textit{TMSI\_Table} unter anderem die \IMSI und die zugewiesene \TMSI sowie den Zeitpunkt des letzten Zugriffs als Unix Zeitstempel. Da diese Datenbank das Feld \textit{id} nicht enthält erfolgt die Zuordnung zu den Datensätzen aus der \textit{sqlite3.db} Datenbank über einen Abgleich des \IMSI Feldes. Diese Datenbankdatei muss zwingend mit einem \textit{Read-only} Flag geöffnet und nach dem Auslesen sofort wieder geschlossen werden, da ansonsten Probleme mit OpenBTS auftreten können.
 
 \subsection{JSON Nachrichten}
+\label{subsec:json}
+
 Diese Sektion beschreibt kurz die \JSON Nachrichten, die in der Anwendung für die Kommunikation zwischen Frontend und Backend verwendet werden.
 
 Alle \JSON Nachrichten, die vom Frontend an das Backend geschickt werden enthalten grundsätzlich ein Feld \inlinecode{cmd}, das den auszuführenden Befehl enthält. Je nachdem welcher Befehl ausgeführt werden soll sind weitere Felder erforderlich.
 
 \subsubsection*{getUsers}
-Dieser Befehl fordert eine vollständige Liste aller bekannter User an. Dies ist der einzige implementierte Befehl, der eine Antwort von Seiten des Backends erhält.
+Dieser Befehl fordert eine vollständige Liste aller bekannter User an. Dies ist der einzige implementierte Befehl, der eine Antwort von Seiten des Backends erhält. Das Feld \textit{lastActive} der Antwort beinhaltet entweder einen Unix Zeitstempel oder -1, falls kein Zeitpunkt bekannt ist.
 
-Befehl:
+\textbullet \space Befehl:
 
 \begin{lstlisting}[style=json]
 {
@@ -87,7 +88,7 @@ Befehl:
 }
 \end{lstlisting}
 
-Antwort:
+\textbullet \space Antwort:
 
 \begin{lstlisting}[style=json]
 [
@@ -124,19 +125,9 @@ Mit diesem Befehl werden die Daten eines einzelnen Benutzers aktualisiert. Sollt
 }
 \end{lstlisting}
 
-\subsubsection*{deleteUser}
-
-Dieser Befehl löscht einen einzelnen Benutzer aus allen Datenbanken.
-
-\begin{lstlisting}[style=json]
-{
-	"cmd":"deleteUser",
-	"id":8
-}
-\end{lstlisting}
 
 \subsubsection*{sendSMSBroadcast}
-Mit diesem Befehl wird eine \SMS an einen oder mehrere Empfänger gesendet. Das Feld \textit{receiver} besteht dafür aus einem \JSON Array in dem die \textit{id's} mehrerer Benutzer angegeben werden können. Das Feld \textit{sender} enthält die Telefonnummer des Absenders, sie muss dem System nicht bekannt sein und kann frei gewählt sein.
+Mit diesem Befehl wird eine \SMS an einen oder mehrere Empfänger gesendet. Das Feld \textit{receiver} besteht dafür aus einem \JSON Array in dem die \textit{id's} mehrerer Benutzer angegeben werden können. Das Feld \textit{sender} enthält die Telefonnummer des Absenders. Sie muss dem System nicht bekannt sein und kann frei gewählt sein.
 
 \begin{lstlisting}[style=json]
 {
@@ -147,3 +138,13 @@ Mit diesem Befehl wird eine \SMS an einen oder mehrere Empfänger gesendet. Das 
 }
 \end{lstlisting}
 
+\subsubsection*{deleteUser}
+
+Dieser Befehl löscht einen einzelnen Benutzer aus allen Datenbanken.
+
+\begin{lstlisting}[style=json]
+{
+"cmd":"deleteUser",
+"id":8
+}
+\end{lstlisting}
