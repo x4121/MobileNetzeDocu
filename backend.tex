@@ -39,7 +39,7 @@ Die Struktur dient als Transportklasse für einen einzelnen User des OpenBTS Sys
 \label{sssec:classsocket}
 Ein Objekt der Klasse Socket ist das Herzstück dieser Anwendung. Es öffnet beim Erzeugen einen \textit{QWebSocket} auf dem übergebenen Port und verbindet die entsprechenden Signale über das Qt eigene Signal \& Slot Prinzip mit den dafür vorgesehenen Funktionen.
 
-Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnection()} aufgerufen, welche die neue Verbindung akzeptiert, zur Liste der bekannten Clients hinzufügt und die Verbindung zur \inlinecode{processTextMessage(QString)} Methode erzeugt. Diese wird aufgerufen, sobald eine neue Nachricht vom Client empfangen wird. Diese Nachricht wird nun zuerst in ein \textit{QJsonDocument} Objekt geparst und anschließend die zum Befehl passende Methode ausgeführt. Eine Übersicht über die erlaubten Befehle und eine kurze Beschreibung jeweils ist im Abschnitt \ref{subsec:json} zu finden.
+Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnection()} aufgerufen, welche die neue Verbindung akzeptiert, zur Liste der bekannten Clients hinzufügt und die Verbindung zur \inlinecode{processTextMessage(QString)} Methode erzeugt. Diese wird aufgerufen, sobald eine neue Nachricht vom Client empfangen wird. Diese Nachricht wird nun zuerst in ein \textit{QJsonDocument} Objekt geparst und anschließend die zum Befehl passende Methode ausgeführt. Eine Übersicht über die erlaubten Befehle und jeweils eine kurze Beschreibung ist im Abschnitt \ref{subsec:json} zu finden.
 
 
 \subsubsection*{Klasse DataBase}
@@ -113,7 +113,7 @@ Dieser Befehl fordert eine vollständige Liste aller bekannter User an. Dies ist
 
 \subsubsection*{updateUser}
 
-Mit diesem Befehl werden die Daten eines einzelnen Benutzers aktualisiert. Sollte für diesen Benutzer noch kein Realname oder eine Telefonnummer eingetragen gewesen sein ist dieser Befehl auch zum Anlegen dieser Informationen zu verstehen.
+Mit diesem Befehl werden die Daten eines einzelnen Benutzers aktualisiert. Sollte für diesen Benutzer noch kein Realname oder eine Telefonnummer eingetragen gewesen sein ist dieser Befehl zugleich zum Anlegen dieser Informationen zu verstehen.
 
 \begin{lstlisting}[style=json]
 {
@@ -144,7 +144,7 @@ Dieser Befehl löscht einen einzelnen Benutzer aus allen Datenbanken.
 
 \begin{lstlisting}[style=json]
 {
-"cmd":"deleteUser",
-"id":8
+	"cmd":"deleteUser",
+	"id":8
 }
 \end{lstlisting}
