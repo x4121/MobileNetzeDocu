@@ -114,3 +114,7 @@ sympy-plots-for-*.tex/
 
 ### TeXStudio
 *.txss
+
+### Sqlite
+*.db-wal
+*.db-shm
