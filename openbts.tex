@@ -2,17 +2,17 @@
 \label{sec:aufgabe}
 
 Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetz mit GSM.
-Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research}\footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit OpenBTS ein \GSM-Netz aufsetzten.
+Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research}\footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit \OpenBTS ein \GSM-Netz aufsetzten.
 
 \section{OpenBTS}
 \label{sec:openbts}
 
-OpenBTS\footnote{\url{http://openbts.org}} ist ein open source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
+\OpenBTS\footnote{\url{http://openbts.org}} ist ein open source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
 
 \subsection{Installation}
 \label{sec:installation}
 
-Zur Installation und initialen Einrichtung von OpenBTS haben wir uns weitestgehend an die Anleitung des OpenBTS-Git-Repository\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
+Zur Installation und initialen Einrichtung von \OpenBTS haben wir uns weitestgehend an die Anleitung des \OpenBTS-Git-Repository\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
 Abhängigkeiten auf den Laborrechner geklont, den aktuellen Branch ausgewählt und für unsere \USRP kompiliert.\\Während dem Kompilieren fiel auf, dass anscheinend nicht alle benötigten Treiber mit dem Repository geladen und installiert werden. Dies ließ sich aber auch durch eine kurze Google-Suche beheben\footnote{\url{http://code.ettus.com/redmine/ettus/projects/uhd/wiki/UHD_Linux}}.
 
 \begin{lstlisting}[language=bash]
@@ -49,9 +49,10 @@ Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komp
 
 \subsection{Herausforderungen}
 Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begrüßt.\todo{Bild einfügen}
-Über das OpenBTS-\CLI konnten die angemeldeten Teilnehmer mithilfe des Befehls \inlinecode{tmsis} anhand ihrer \IMSI identifiziert werden. Mit dem Befehl \inlinecode{sendsms <IMSI> <sourceAddress> <message text>} kann an die \emph{\IMSI} eine \SMS-Nachricht (\emph{message text}) mit dem Absender \emph{sourceAddress} versandt werden.
 
-Hierbei ließen sich bereits Inkonsistenzen in der Auslieferung der erstellten \SMS feststellen. Nach der erfolgreichen Integration von OpenBTS mit Asterisk verblieb sowohl die Auslieferungsrate von \SMS-Nachrichten auf die hinterlegte Rufnummer auf einem niedrigen Niveau unter zehn Prozent als auch das erfolgreiche Pagen der Mobilteile.
+Über das \OpenBTS-\CLI konnten die angemeldeten Teilnehmer mithilfe des Befehls \inlinecode{tmsis} anhand ihrer \IMSI identifiziert werden. Mit dem Befehl \inlinecode{sendsms <IMSI> <sourceAddress> <message text>} kann an die \emph{\IMSI} eine \SMS-Nachricht (\emph{message text}) mit dem Absender \emph{sourceAddress} versandt werden.
+
+Hierbei ließen sich bereits Inkonsistenzen in der Auslieferung der erstellten \SMS feststellen. Nach der erfolgreichen Integration von \OpenBTS mit Asterisk verblieb sowohl die Auslieferungsrate von \SMS-Nachrichten auf die hinterlegte Rufnummer auf einem niedrigen Niveau unter zehn Prozent als auch das erfolgreiche Pagen der Mobilteile.
 \subsubsection{Konsistenter Verbindungsaufbau}
 Nach tagelangem Konfigurieren ließ sich zwar keine Verbesserung in der Zustellrate von \SMS-Nachrichten und einem konsistenten Rufaufbau erzielen, dennoch führten die getätigten Beobachtungen letztendlich zur Fehlerfindung. War das zu pagende Gerät weiter entfernt als unser normaler Laborarbeitsplatz, so stieg die Zustellrate signifikant an.
 Die Ursache hierfür lag demnach in der zu hohen Sendeleistung der Basisstation.
@@ -70,7 +71,7 @@ In \autoref{fig:attenuator} ist das montierte Dämpfungsglied an der Antennenbuc
 
 \subsubsection{Automatisierte Benutzeranmeldung}
 Wie in \autoref{sec:konfiguration} beschrieben, wurden die Teilnehmer mit deren \IMSI und gewünschter Telefonnummer in die Asterisk-Datenbank von Hand eingetragen. Selbst im Laborversuch mit einer geringen Geräteanzahl stellte sich dies als zu unkomfortabel heraus.
-Aus diesem Grund wurde die bestehende Funktionalität von OpenBTS und Asterisk über die Konfiguration entsprechend der Vorstellung der Gruppenmitgliedern angepasst.
+Aus diesem Grund wurde die bestehende Funktionalität von \OpenBTS und Asterisk über die Konfiguration entsprechend der Vorstellung der Gruppenmitgliedern angepasst.
 
 Die Willkommensnachricht weist die neuen Benutzer an, mit einer gewünschten Telefonnummer per \SMS-Nachricht zu antworten, damit ihnen diese zugeteilt werden kann. Wird eine bereits verwendete oder ungültige Rufnummer angegeben, so wird dies dem Benutzer wiederum per \SMS-Nachricht mitgeteilt.
 Erfolgt die Rufnummernbindung an die \IMSI, so wird diese Zuordnung in der Asterisk-Datenbank in \emph{/var/lib/asterisk/sqlite3dir/sqlite3.db} persistiert.
