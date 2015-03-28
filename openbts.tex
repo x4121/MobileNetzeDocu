@@ -41,11 +41,33 @@ sudo apt-get -f install
 
 Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komponenten in Upstart eingetragen wurden, konnte man auch einfach den Laborrechner neustarten.
 
-\subsection{Inbetriebnahme}
-\label{sec:inbetriebnahme}
-
 \subsection{Konfiguration}
 \label{sec:konfiguration}
+Vor der Inbetriebnahme der Basisstation musste diese auf die gewünschten Bedürfnisse eingestellt werden. Insbesondere betraf das die Konfiguration von OpenBTS und Asterisk. Die Software OpenBTS lässt sich generell über die Datei ``openBts.conf'' konfigurieren. Hierin sind alle Einstellungen für die Basisstation zu sehen. Asterisk kann durch die Datei ```sip.conf'' eingestellt werden. Diese Datei ermöglicht es ein wenig Geschäftslogik umzusetzen, indem bestimmten Rufnummernmustern eine verschiedene Verarbeitung zugeordnet wird. \\
+
+\subsubsection{Konfiguration von OpenBTS}
+Als erstes sollte das Frequenzband eingestellt werden, um nicht unbeabsichtigt auf bereits reservierten Bändern zu kommunizieren.  Der für die Hochschule gültige Frequenzbereich kann aus dem entsprechendem Lizenzdokument entnommen werden. Mit Hilfe des Feldes \inlinecode{GSM.Radio.Band} kann das Band eingestellt werden. Die genau Frequenz wird dann durch die Kanalnummer (ARFCN) durch \inlinecode{GSM.Radio.C0} festgelegt. Die Kanalnummer kann durch die Frequenz folgendermaßen zurück gerechnet werden:\\
+$ C0 = \frac{Uplinkfrequenz - Basisfrequenz}{0.2} + Basiskanalnummer $ \\
+In unserem Fall war die Lizenz auf dem Uplink mit der Frequenz ?? festgelegt. Dadurch befinden wir uns im Band 1800 mit der Basisfrequenz von 1710.2. Die Basiskanalnummer beträgt in diesem Band 512, wodurch sich für uns folgende Kanalnummer ergab:\\
+$ C0 = \frac{?? - 1710.2}{0.2} + 512 = ?? $ \\
+Danach wurden die MCC, MCC sowie der Name der Basisstation konfiguriert. Der MCC (Mobile Country Code) gibt an, in welchem Land die Basistation betrieben wird. Der MNC (Mobile Network Code) spiegelt wiederum den Betreiber wider. Der MCC für Deutschland lautet 262. Diese Codes können entsprechend durch die Felder \inlinecode{GSM.Identity.MCC} und \inlinecode{GSM.Identity.MNC} angegeben werden. Der Name der Basisstation wird durch das Feld \inlinecode{GSM.Identity.ShortName} definiert und bei der Suche nach einem Netzwerk beim Endgerät angezeigt. \\
+Die Basisstation sollte so eingestellt werden, dass sie nur vordefinierte IMSIs akzeptiert und nur zu diesen eine Verbindung aufbaut. Ansonsten verbinden sich alle in der Nähe befindlichen Endgeräte mit dieser Basisstation, falls sie die einzige verfügbare in der Nähe ist. Um nur ausgewählte IMSIs zu zulassen kann ein regulärer Ausdruck in das Feld \inlinecode{Control.LUR.OpenRegistration} eingetragen werden. Dieser Ausdruck sah in unserem Fall folgendermaßen aus: \\ \inlinecode{(262017540093841)|(262014520187752)|(262017241084828)|(262073920210702)|(262016144053673)} \\
+Möchte man diese Basisstation professionell betreiben, sollte eine eigene MNC verwendet werden. Dazu müssten man jedoch eigene SIM-Karten herstellen (wie zum Beispiel das CCC mit einer MNC von 42). Dadurch kann der reguläre Ausdruck einfach auf die MNC hin eingestellt werden, wodurch sie nicht bei jeder neuen \IMSI geändert werden muss.
+
+
+\subsubsection{Konfiguration von Asterisk}
+Asterisk ist für die Verarbeitung von eingehenden Daten (wie Anrufen, SMS, usw.) verantwortlich. Es vergibt auch Rufnummern an die bestimmten Netzwerkteilnehmer. Asterisk liefert eine SQLite-Datenbank mit, welche diese Daten beinhaltet. Zu Testzwecken wurde diese Datenbank zunächst manuell durch ein Skript befüllt. Dieses Skript ist in Anhang ?? zu finden. Für jede IMSI wird ein Eintrag in die Tabelle ``sip_buddies'' getätigt, wodurch diese IMSI dann im System als registriert gilt. Außerdem wird in die Tabelle ``dialdata_table'' noch für jede registrierte IMSI eine Rufnummer vergeben, unter welcher diese dann im Netzwerk ansprechbar ist. Später wurde diese Aufgabe durch unsere Applikation übernommen. Die Datenbank ist unter \textit{/var/lib/asterisk/sqlite3dir/sqlite3.db} zu finden.
+
+\textbf{Hier Erklärung der sip.conf}
+
+\subsection{Inbetriebnahme}
+\label{sec:inbetriebnahme}
+Nach erfolgreichem Starten der Dienste von OpenBTS und Asterisk konnten erste Tests durchgeführt werden. Dafür ist die Asterisk-CLI eine gute Möglichkeit. Diese kann durch den Befehl \inlinecode{sudo asterisk -rvvv} gestartet werden. Sie bietet beispielsweise ein Kommando zum versenden von SMS an Netzwerkteilnehmer, welche wie folgt aussieht:\\
+\inlinecode{sendsms IMSI Nachricht}\\
+und kann beispielsweise folgendermaßen aussehen:\\
+\inlinecode{sendsms 262017540093841 Hallo, das ist eine Test-SMS!}\\
+Eine erfolgreich empfangene SMS weist darauf hin, dass die \IMSI erfolgreich im Netzwerk registriert worden ist. Jetzt können weitere Tests in Verbindung mit Asterisk begonnen werden. Zunächst wurde überprüft, ob die Nummer 222, welche eine ``Hello World''-Wiedergabe liefert, erreichbar ist. Bei Erfolg wird am Endgerät eine entsprechende Meldung wiedergegeben. Letztendlich wurde versucht ein Telefonat zwischen zwei Endgeräten aufbauen zu können. Dafür ist in einem Endgerät die Rufnummer eines anderen im Netzwerk registrierten Endgerät angerufen worden. Nach richtiger Konfiguration konnten beide Teilnehmer über unsere Basisstation miteinander über ein Telefonat kommunizieren. \\
+Die CLI dient außerdem wie eine Art Logger. Sie liefert Konsolenausgaben bei allen Aktivitäten im Netzwerk und lässt durch Meldungen auf potentielle Fehler hinweisen. 
 
 \subsection{Herausforderungen}
 \label{sec:herausforderung}
@@ -89,6 +111,6 @@ Die zu erstellende Anwendung (siehe Kapitel \nameref{sec:frontend} und \nameref{
 Die bestehende Konfiguration aus \autoref{sec:konfiguration} widerspricht mit den voreingestellten Standardwerten klar dieser Forderung. 
 Im Labor wurden inaktive Geräte nicht auf Existenz überprüft, d.~h. solange ein \UE nicht selbständig aktiv eine Verbindung aufbaute, wurde die zugehörige \IMSI in der Ausgabe des \inlinecode{tmsis}-Befehls nicht aktualisiert. Um diese Malaise \todo[author=Grodon]{eine was?}\todo[author=Bögl]{Unstimmigkeit. Ist das zu geschwollen?} zu mindern, werden die folgenden Parameter angepasst.\\
 Mit einem Konfigurationswert \inlinecode{1} für \inlinecode{Control.LUR.QueryIMEI} wird von jeder Mobilstation bei einem initialen \LUR die \IMEI abgefragt.\\
-Durch das Setzten von \inlinecode{Control.LUR.SendTMSIs} auf \inlinecode{1} werden neue \TMSI-Zuweisungen an die Mobilgeräte gesendet, die sich im Netzwerk anmelden dürfen (siehe \autoref{sec:konfiguration} \inlinecode{Control.LUR.OpenRegistration}). Diese Änderungen werden in die \TMSI-Datenbank gespeichert, die über das Konfigurationselement \inlinecode{Control.Reporting.\allowbreak TMSITable} eingestellt werden kann, und können somit direkt aus der Datenbank ausgelesen werden oder über die Ausgabe des Befehls \inlinecode{tmsis}.\\
+Durch das Setzen von \inlinecode{Control.LUR.SendTMSIs} auf \inlinecode{1} werden neue \TMSI-Zuweisungen an die Mobilgeräte gesendet, die sich im Netzwerk anmelden dürfen (siehe \autoref{sec:konfiguration} \inlinecode{Control.LUR.OpenRegistration}). Diese Änderungen werden in die \TMSI-Datenbank gespeichert, die über das Konfigurationselement \inlinecode{Control.Reporting.\allowbreak TMSITable} eingestellt werden kann, und können somit direkt aus der Datenbank ausgelesen werden oder über die Ausgabe des Befehls \inlinecode{tmsis}.\\
 Des Weiteren muss der Zeitschritt für die Registrierungsgültigkeit in Minuten \inlinecode{GSM.Timer.T3212} konfiguriert werden, der auf ein vielfaches von sechs und mindestens dieselbe Zahl gestellt werden kann. Da die Konfigurationsoption \inlinecode{SIP.RegistrationPeriod}, die eine Registrierungszeitspanne in Minuten angibt, echt größer dem \inlinecode{GSM.Timer.T3212}-Wert sein muss, wird diese auf 7 [Minuten] und der letztgenannte auf 6 [Minuten] festgelegt.\\
 Mit dieser veränderten Konfiguration werden inaktive Mobilgeräte nach spätestens sieben Minuten als \emph{außer Reichweite} oder \emph{im Stand-by} erkannt, womit der Präsenzdienst seine Funktion mit einer zeitlichen Untergrenze von eben erwähnten sieben Minuten erfüllen kann.
