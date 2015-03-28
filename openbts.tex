@@ -43,7 +43,7 @@ Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komp
 
 \subsection{Konfiguration}
 \label{sec:konfiguration}
-Vor der Inbetriebnahme der Basisstation musste diese auf die gewünschten Bedürfnisse eingestellt werden. Insbesondere betraf das die Konfiguration von \OpenBTS und Asterisk. Die Software \OpenBTS lässt sich generell über die Datei ``openBts.conf'' konfigurieren. Hierin sind alle Einstellungen für die Basisstation zu sehen. Asterisk kann durch die Datei ```sip.conf'' eingestellt werden. Diese Datei ermöglicht es ein wenig Geschäftslogik umzusetzen, indem bestimmten Rufnummernmustern eine verschiedene Verarbeitung zugeordnet wird. \\
+Vor der Inbetriebnahme der Basisstation musste diese auf die gewünschten Bedürfnisse eingestellt werden. Insbesondere betraf das die Konfiguration von \OpenBTS und Asterisk. Die Software \OpenBTS lässt sich generell über die Datei ``openBts.conf'' konfigurieren. Hierin sind alle Einstellungen für die Basisstation zu sehen. Asterisk kann durch die Datei ``extensions.conf'' eingestellt werden. Diese Datei ermöglicht es ein wenig Geschäftslogik umzusetzen, indem bestimmten Rufnummernmustern eine verschiedene Verarbeitung zugeordnet wird. \\
 
 \subsubsection{Konfiguration von OpenBTS}
 Als erstes sollte das Frequenzband eingestellt werden, um nicht unbeabsichtigt auf bereits reservierten Bändern zu kommunizieren.  Der für die Hochschule gültige Frequenzbereich kann aus dem entsprechendem Lizenzdokument entnommen werden. Mit Hilfe des Feldes \inlinecode{GSM.Radio.Band} kann das Band eingestellt werden. Die genaue Frequenz wird dann durch die Kanalnummer (ARFCN) durch \inlinecode{GSM.Radio.C0} festgelegt. Die Kanalnummer kann durch die Frequenz folgendermaßen zurück gerechnet werden:\\
@@ -57,9 +57,15 @@ Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC 
 
 
 \subsubsection{Konfiguration von Asterisk}
-Asterisk ist für die Verarbeitung von eingehenden Daten (wie Anrufen, SMS, usw.) verantwortlich. Es vergibt auch Rufnummern an die bestimmten Netzwerkteilnehmer. Asterisk liefert eine SQLite-Datenbank mit, welche diese Daten beinhaltet. Zu Testzwecken wurde diese Datenbank zunächst manuell durch ein Skript befüllt. Dieses Skript ist in Anhang ?? zu finden. Für jede IMSI wird ein Eintrag in die Tabelle ``sip\textunderscore buddies'' getätigt, wodurch diese IMSI dann im System als registriert gilt. Außerdem wird in die Tabelle ``dialdata\textunderscore table'' noch für jede registrierte IMSI eine Rufnummer vergeben, unter welcher diese dann im Netzwerk ansprechbar ist. Später wurde diese Aufgabe durch unsere Applikation übernommen. Die Datenbank ist unter \textit{/var/lib/asterisk/sqlite3dir/sqlite3.db} zu finden.
-
-\textbf{Hier Erklärung der sip.conf}
+Asterisk ist für die Verarbeitung von eingehenden Daten (wie Anrufen, SMS, usw.) verantwortlich. Es vergibt auch Rufnummern an die bestimmten Netzwerkteilnehmer. Asterisk liefert eine SQLite-Datenbank mit, welche diese Daten beinhaltet. Zu Testzwecken wurde diese Datenbank zunächst manuell durch ein Skript befüllt. Dieses Skript ist in Anhang ?? zu finden. Für jede \IMSI wird ein Eintrag in die Tabelle ``sip\textunderscore buddies'' getätigt, wodurch diese IMSI dann im System als registriert gilt. Außerdem wird in die Tabelle ``dialdata\textunderscore table'' noch für jede registrierte IMSI eine Rufnummer vergeben, unter welcher diese dann im Netzwerk ansprechbar ist. Später wurde diese Aufgabe durch unsere Applikation übernommen. Die Datenbank ist unter \textit{/var/lib/asterisk/sqlite3dir/sqlite3.db} zu finden. \\
+Zuletzt muss in der Datei ``extensions.conf'' das Verhalten bei eingehenden Anrufen definiert werden. Dies kann anhand von Rufnummernmustern geschehen. Dabei werden bestimmten Rufnummern ein bestimmter Ablauf zu geordnet. Zu Testzwecken wurde der Nummer 222 eine ``Hello World''-Wiedergabe zugeordnet. Dafür wurde folgender Eintrag der \inlinecode{[phones]} Sektion hinzugefügt:
+\begin{tabbing}$
+exten => 222,\hspace{1cm} \= 1,Answer()\\
+\> same => n,Wait(4)\\
+\> same => n,Playback(hello-world)\\
+\> same => n,Wait(4)\\
+\> same => n,Hangup\\ $
+\end{tabbing}
 
 \subsection{Inbetriebnahme}
 \label{sec:inbetriebnahme}
