@@ -48,8 +48,15 @@ Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komp
 \label{sec:konfiguration}
 
 \subsection{Herausforderungen}
-Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begrüßt.\todo{Bild einfügen}
+Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begrüßt (siehe \autoref{fig:welcomeMessage}\todo{hat wer eine SMS mit der neuen Nachricht?}).
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\textwidth]{\picdir welcome_message.png}
+	\caption{Willkommensnachricht im Labornetz}
+	\label{fig:welcomeMessage}
+	
+\end{figure}
 Über das \OpenBTS-\CLI konnten die angemeldeten Teilnehmer mithilfe des Befehls \inlinecode{tmsis} anhand ihrer \IMSI identifiziert werden. Mit dem Befehl \inlinecode{sendsms <IMSI> <sourceAddress> <message text>} kann an die \emph{\IMSI} eine \SMS-Nachricht (\emph{message text}) mit dem Absender \emph{sourceAddress} versandt werden.
 
 Hierbei ließen sich bereits Inkonsistenzen in der Auslieferung der erstellten \SMS feststellen. Nach der erfolgreichen Integration von \OpenBTS mit Asterisk verblieb sowohl die Auslieferungsrate von \SMS-Nachrichten auf die hinterlegte Rufnummer auf einem niedrigen Niveau unter zehn Prozent als auch das erfolgreiche Pagen der Mobilteile.
