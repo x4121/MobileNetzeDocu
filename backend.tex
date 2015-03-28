@@ -4,7 +4,7 @@ Das Backend für die Webanwendung wurde in C++ in Verbindung mit der Bibliothek 
 
 \subsection{Anforderungen}
 
-Aufgabe des Backends ist es Befehle in Form von \JSON Nachrichten der Weboberfläche entgegenzunehmen und daraus resultierend entweder einen Datenbankzugriff durchzuführen oder einen Befehl mit Hilfe des \CLI an die OpenBTS Software zu schicken.
+Aufgabe des Backends ist es Befehle in Form von \JSON Nachrichten der Weboberfläche entgegenzunehmen und daraus resultierend entweder einen Datenbankzugriff durchzuführen oder einen Befehl mit Hilfe des \CLI an die \OpenBTS Software zu schicken.
 
 Die Befehle, die unterstützt werden sollen sind:
 
@@ -23,7 +23,7 @@ Für das Backend wurden zwei Klassen und eine Struktur implementiert. Diese sind
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.8\textwidth]{\picdir backend_uml.png}
-	\caption{OpenBTS Webservice Backend Architektur}
+	\caption{\acs*{OpenBTS} Webservice Backend Architektur}
 	\label{fig:uml_class}
 \end{figure}
 
@@ -32,7 +32,7 @@ Für das Backend wurden zwei Klassen und eine Struktur implementiert. Diese sind
 In der Main Methode wird zu Beginn getestet, ob bereits eine \textit{settings.ini} Datei mit den Einstellungen für das Backend existiert. Ist dies nicht der Fall wird zuallererst eine Datei mit voreingestellten Standartwerten erzeugt. Anschließend wird ein Objekt der Klasse Socket (siehe \ref{sssec:classsocket}) mit dem Port aus den Einstellungen instantiiert. Zum Abschluss wird die Qt eigene Event Loop (siehe \textit{QCoreApplication}) gestartet, durch die der weitere Programmablauf geregelt wird.
 
 \subsubsection*{Struktur BTSUser}
-Die Struktur dient als Transportklasse für einen einzelnen User des OpenBTS Systems. Sie beinhaltet neben den Objektvariablen zwei Helfermethoden, die zum Erzeugen der Objekte aus \JSON oder einem Datenbankeintrag dienen sowie eine weitere Methode, die das Objekt in ein \textit{QJsonObject} umwandelt.
+Die Struktur dient als Transportklasse für einen einzelnen User des \OpenBTS Systems. Sie beinhaltet neben den Objektvariablen zwei Helfermethoden, die zum Erzeugen der Objekte aus \JSON oder einem Datenbankeintrag dienen sowie eine weitere Methode, die das Objekt in ein \textit{QJsonObject} umwandelt.
 
 
 \subsubsection*{Klasse Socket}
@@ -44,7 +44,7 @@ Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnect
 
 \subsubsection*{Klasse DataBase}
 
-Die Klasse \textit{DataBase} kapselt alle Zugriffe auf die verwendeten Datenbanken. Hierzu wird die Qt interne Bibliotheksklasse \textit{QSQLDatabase} verwendet. Diese bietet unter anderen Unterstützung für die, unter OpenBTS verwendeten SQLite3 Datenbanken. Die jeweiligen Anfragen werden durch \SQL Querys ausgeführt, die mit Hilfe von \textit{Prepared Statements} erzeugt werden.
+Die Klasse \textit{DataBase} kapselt alle Zugriffe auf die verwendeten Datenbanken. Hierzu wird die Qt interne Bibliotheksklasse \textit{QSQLDatabase} verwendet. Diese bietet unter anderen Unterstützung für die, unter \OpenBTS verwendeten SQLite3 Datenbanken. Die jeweiligen Anfragen werden durch \SQL Querys ausgeführt, die mit Hilfe von \textit{Prepared Statements} erzeugt werden.
 
 OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien. In diesem Projekt sind davon die Dateien \textit{sqlite3.db} und \textit{TMSITable.db} relevant. Diese sind schematisch in Abbildung \ref{fig:database_er} dargestellt und im Folgenden näher erläutert.
 
@@ -57,18 +57,18 @@ OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien.
 \end{figure}
 
 
-\paragraph{\textit{sqlite3.db}} enthält grundlegende Informationen über alle registrierten Geräte. Dafür werden von OpenBTS bzw. Asterisk zwei Tabellen benutzt. Daneben wurde für dieses Projekt eine neue hinzugefügt. Für die Zuordnung der Datensätze wird in dieser Datenbank das eindeutige Feld \textit{id} verwendet. Nachfolgend sind kurz die Tabellen und deren Verwendungszwecke aufgeführt.
+\paragraph{\textit{sqlite3.db}} enthält grundlegende Informationen über alle registrierten Geräte. Dafür werden von \OpenBTS bzw. Asterisk zwei Tabellen benutzt. Daneben wurde für dieses Projekt eine neue hinzugefügt. Für die Zuordnung der Datensätze wird in dieser Datenbank das eindeutige Feld \textit{id} verwendet. Nachfolgend sind kurz die Tabellen und deren Verwendungszwecke aufgeführt.
 
 \begin{itemize}
 	\item \textit{DIALTABLE\_DATA} enthält die Zuordnungen der eindeutigen id zu einer \IMSI sowie zu einer frei konfigurierbaren Telefonnummer.
 	
-	\item \textit{SIP\_BUDDIES} enthält ebenfalls die id, die \IMSI sowie die Telefonnummer. In dieser Tabelle sind jedoch viele weitere Optionen konfiguriert, die vor allem für den Betrieb mit IP-Telefonie und dem \SIP dienen. Obwohl hier eine Redundanz enthalten ist müssen die \IMSI und die Telefonnummer für den korrekten Betrieb des OpenBTS in beiden Tabellen konfiguriert sein.
+	\item \textit{SIP\_BUDDIES} enthält ebenfalls die id, die \IMSI sowie die Telefonnummer. In dieser Tabelle sind jedoch viele weitere Optionen konfiguriert, die vor allem für den Betrieb mit IP-Telefonie und dem \SIP dienen. Obwohl hier eine Redundanz enthalten ist müssen die \IMSI und die Telefonnummer für den korrekten Betrieb des \OpenBTS in beiden Tabellen konfiguriert sein.
 	
 	\item \textit{USERNAME} wurde für die Zuordnung von Realnamen neu eingeführt. Sie wird beim Starten der Anwendung mit dem \SQL Befehl \inlinecode{CREATE TABLE IF NOT EXISTS}  erzeugt, falls sie noch nicht existiert. In ihr ist lediglich die Zuordnung der \textit{id} zu einem Realnamen vermerkt. Da beim Aktualisieren nicht sichergestellt ist, dass der Eintrag mit dieser \textit{id} bereits vorhanden ist, wird zuerst der Befehl \inlinecode{UPDATE} ausgeführt, der keine Änderung bewirkt, wenn der Eintrag nicht existiert. Anschließend wird \inlinecode{INSERT OR IGNORE} mit denselben Daten ausgeführt um den Eintrag anzulegen falls er noch nicht vorhanden war.
 \end{itemize}
 
 
-\paragraph{\textit{TMSITable.db}} hält Informationen über aktive bzw. kürzlich angemeldete Geräte. Zu diesem Zweck enthält die Tabelle \textit{TMSI\_Table} unter anderem die \IMSI und die zugewiesene \TMSI sowie den Zeitpunkt des letzten Zugriffs als Unix Zeitstempel. Da diese Datenbank das Feld \textit{id} nicht enthält erfolgt die Zuordnung zu den Datensätzen aus der \textit{sqlite3.db} Datenbank über einen Abgleich des \IMSI Feldes. Diese Datenbankdatei muss zwingend mit einem \textit{Read-only} Flag geöffnet und nach dem Auslesen sofort wieder geschlossen werden, da ansonsten Probleme mit OpenBTS auftreten können.
+\paragraph{\textit{TMSITable.db}} hält Informationen über aktive bzw. kürzlich angemeldete Geräte. Zu diesem Zweck enthält die Tabelle \textit{TMSI\_Table} unter anderem die \IMSI und die zugewiesene \TMSI sowie den Zeitpunkt des letzten Zugriffs als Unix Zeitstempel. Da diese Datenbank das Feld \textit{id} nicht enthält erfolgt die Zuordnung zu den Datensätzen aus der \textit{sqlite3.db} Datenbank über einen Abgleich des \IMSI Feldes. Diese Datenbankdatei muss zwingend mit einem \textit{Read-only} Flag geöffnet und nach dem Auslesen sofort wieder geschlossen werden, da ansonsten Probleme mit \OpenBTS auftreten können.
 
 \subsection{JSON Nachrichten}
 \label{subsec:json}
