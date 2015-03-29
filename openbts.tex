@@ -91,7 +91,7 @@ Die Basisstation sollte so eingestellt werden, dass sie nur vordefinierte \acp{I
 (262011234567891)|(262012345678912)|(262013456789123)|
 (262074567891234)|(262015678912345)
 \end{lstlisting}
-Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC verwendet werden. Dazu müssten man jedoch eigene SIM-Karten herstellen (wie zum Beispiel das CCC mit einer \MNC von 42). Dadurch kann der reguläre Ausdruck einfach auf die MNC hin eingestellt werden, wodurch sie nicht bei jeder neuen \IMSI geändert werden muss.
+Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC verwendet werden. Dazu müssten man jedoch eigene SIM-Karten herstellen (wie zum Beispiel der \CCC mit einer \MNC von 42). Dadurch kann der reguläre Ausdruck einfach auf die \MNC hin eingestellt werden, wodurch sie nicht bei jeder neuen \IMSI geändert werden muss.
 
 
 \subsubsection{Konfiguration von Asterisk}
@@ -130,7 +130,7 @@ Das \CLI dient außerdem wie eine Art Logger. Sie liefert Konsolenausgaben bei a
 
 \subsection{Herausforderungen}
 \label{sec:herausforderung}
-Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begrüßt (siehe \autoref{fig:welcomeMessage}\todo{hat wer eine SMS mit der neuen Nachricht?}).
+Nachdem die Konfiguration nach \autoref{sec:konfiguration} erfolgte, konnten sich Mobilteile im eigenen Netz registrieren und wurden durch die erstellte Willkommensnachricht begrüßt (siehe \autoref{fig:welcomeMessage}.
 
 \begin{figure}[h!]
 	\centering
@@ -168,7 +168,7 @@ Erfolgt die Rufnummernbindung an die \IMSI, so wird diese Zuordnung in der Aster
 \subsubsection{Aktualisierung der registrierten Benutzer}
 Die zu erstellende Anwendung (siehe Kapitel \nameref{sec:frontend} und \nameref{sec:backend}) fordert eine Aktualisierung der aktiv angemeldeten Benutzer. Dies stellt eine vereinfachte Form eines Präsenzdienstes darstellt.\\
 Die bestehende Konfiguration aus \autoref{sec:konfiguration} widerspricht mit den voreingestellten Standardwerten klar dieser Forderung. 
-Im Labor wurden inaktive Geräte nicht auf Existenz überprüft, d.~h. solange ein \UE nicht selbständig aktiv eine Verbindung aufbaute, wurde die zugehörige \IMSI in der Ausgabe des \inlinecode{tmsis}-Befehls nicht aktualisiert. Um diese Malaise \todo[author=Grodon]{eine was?}\todo[author=Bögl]{Unstimmigkeit. Ist das zu geschwollen?} zu mindern, werden die folgenden Parameter angepasst.\\
+Im Labor wurden inaktive Geräte nicht auf Existenz überprüft, d.~h. solange ein \UE nicht selbständig aktiv eine Verbindung aufbaute, wurde die zugehörige \IMSI in der Ausgabe des \inlinecode{tmsis}-Befehls nicht aktualisiert. Um diese Malaise zu mindern, werden die folgenden Parameter angepasst.\\
 Mit einem Konfigurationswert \inlinecode{1} für \inlinecode{Control.LUR.QueryIMEI} wird von jeder Mobilstation bei einem initialen \LUR die \IMEI abgefragt.\\
 Durch das Setzen von \inlinecode{Control.LUR.SendTMSIs} auf \inlinecode{1} werden neue \TMSI-Zuweisungen an die Mobilgeräte gesendet, die sich im Netzwerk anmelden dürfen (siehe \autoref{sec:konfiguration} \inlinecode{Control.LUR.OpenRegistration}). Diese Änderungen werden in die \TMSI-Datenbank gespeichert, die über das Konfigurationselement \inlinecode{Control.Reporting.\allowbreak TMSITable} eingestellt werden kann, und können somit direkt aus der Datenbank ausgelesen werden oder über die Ausgabe des Befehls \inlinecode{tmsis}.\\
 Des Weiteren muss der Zeitschritt für die Registrierungsgültigkeit in Minuten \inlinecode{GSM.Timer.T3212} konfiguriert werden, der auf ein vielfaches von sechs und mindestens dieselbe Zahl gestellt werden kann. Da die Konfigurationsoption \inlinecode{SIP.RegistrationPeriod}, die eine Registrierungszeitspanne in Minuten angibt, echt größer dem \inlinecode{GSM.Timer.T3212}-Wert sein muss, wird diese auf 7 [Minuten] und der letztgenannte auf 6 [Minuten] festgelegt.\\
