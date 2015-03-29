@@ -50,7 +50,7 @@ Als erstes sollte das Frequenzband eingestellt werden, um nicht unbeabsichtigt a
 $ C0 = \frac{Uplinkfrequenz - Basisfrequenz}{0.2} + Basiskanalnummer $ \\ \\
 In unserem Fall war die Lizenz auf dem Uplink mit der Frequenz \SI{1781.2}{\mega\hertz} festgelegt. Dadurch befinden wir uns im Band 1800 mit der Basisfrequenz von 1710.2. Die Basiskanalnummer beträgt in diesem Band 512, wodurch sich für uns folgende Kanalnummer ergab:\\ \\
 $ C0 = \frac{1781.2 - 1710.2}{0.2} + 512 = 867 $ \\ \\
-Danach wurden die \MCC, \MCC sowie der Name der Basisstation konfiguriert. Der \MCC gibt an, in welchem Land die Basistation betrieben wird. Der \MNC spiegelt wiederum den Betreiber wider. Der \MCC für Deutschland lautet 262. Diese Codes können entsprechend durch die Felder \inlinecode{GSM.Identity.MCC} und \inlinecode{GSM.Identity.MNC} angegeben werden. Der Name der Basisstation wird durch das Feld \inlinecode{GSM.Identity.ShortName} definiert und bei der Suche nach einem Netzwerk beim Endgerät angezeigt. \\
+Danach wurden der \MCC, \MNC sowie der Name der Basisstation konfiguriert. Der \MCC gibt an, in welchem Land die Basistation betrieben wird. Der \MNC spiegelt wiederum den Betreiber wider. Der \MCC für Deutschland lautet 262. Diese Codes können entsprechend durch die Felder \inlinecode{GSM.Identity.MCC} und \inlinecode{GSM.Identity.MNC} angegeben werden. Der Name der Basisstation wird durch das Feld \inlinecode{GSM.Identity.ShortName} definiert und bei der Suche nach einem Netzwerk beim Endgerät angezeigt. \\
 Die Basisstation sollte so eingestellt werden, dass sie nur vordefinierte \acp{IMSI} akzeptiert und nur zu diesen eine Verbindung aufbaut. Ansonsten verbinden sich alle in der Nähe befindlichen Endgeräte mit dieser Basisstation, falls sie die einzige verfügbare in der Nähe ist. Um nur ausgewählte \acp{IMSI} zu zulassen kann ein regulärer Ausdruck in das Feld \inlinecode{Control.LUR.OpenRegistration} eingetragen werden. Dieser Ausdruck sah in unserem Fall folgendermaßen aus: \\
 \begin{lstlisting}
 (262011234567891)|(262012345678912)|(262013456789123)|
@@ -60,7 +60,7 @@ Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC 
 
 
 \subsubsection{Konfiguration von Asterisk}
-Asterisk ist für die Verarbeitung von eingehenden Daten (wie Anrufen, SMS, usw.) verantwortlich. Es vergibt auch Rufnummern an die bestimmten Netzwerkteilnehmer. Asterisk liefert eine SQLite-Datenbank mit, welche diese Daten beinhaltet. Zu Testzwecken wurde diese Datenbank zunächst manuell durch ein Skript befüllt. Dieses Skript ist in Anhang ?? zu finden. Für jede \IMSI wird ein Eintrag in die Tabelle ``sip\textunderscore buddies'' getätigt, wodurch diese IMSI dann im System als registriert gilt. Außerdem wird in die Tabelle ``dialdata\textunderscore table'' noch für jede registrierte IMSI eine Rufnummer vergeben, unter welcher diese dann im Netzwerk ansprechbar ist. Später wurde diese Aufgabe durch unsere Applikation übernommen. Die Datenbank ist unter \textit{/var/lib/asterisk/sqlite3dir/sqlite3.db} zu finden. \\
+Asterisk ist für die Verarbeitung von eingehenden Daten (wie Anrufen, SMS, usw.) verantwortlich. Es vergibt auch Rufnummern an die bestimmten Netzwerkteilnehmer. Asterisk liefert eine SQLite-Datenbank mit, welche diese Daten beinhaltet. Zu Testzwecken wurde diese Datenbank zunächst manuell durch ein Skript befüllt. Dieses Skript ist in Anhang \ref{app:A} zu finden. Für jede \IMSI wird ein Eintrag in die Tabelle ``sip\textunderscore buddies'' getätigt, wodurch diese IMSI dann im System als registriert gilt. Außerdem wird in die Tabelle ``dialdata\textunderscore table'' noch für jede registrierte IMSI eine Rufnummer vergeben, unter welcher diese dann im Netzwerk ansprechbar ist. Später wurde diese Aufgabe durch unsere Applikation übernommen. Die Datenbank ist unter \textit{/var/lib/asterisk/sqlite3dir/sqlite3.db} zu finden. \\
 Zuletzt muss in der Datei ``extensions.conf'' das Verhalten bei eingehenden Anrufen definiert werden. Dies kann anhand von Rufnummernmustern geschehen. Dabei werden bestimmten Rufnummern ein bestimmter Ablauf zugeordnet. Zu Testzwecken wurde der Nummer 222 eine ``Hello World''-Wiedergabe hinterlegt. Dafür ist folgender Eintrag der \inlinecode{[phones]} Sektion hinzugefügt worden:
 \begin{lstlisting}
 exten => 222,   1,Answer()
@@ -70,7 +70,7 @@ exten => 222,   1,Answer()
                 same => n,Hangup
 \end{lstlisting}
 
-Danach folgt die Implementierung einer generische Variante, welche versucht jegliche eingehenden Verbindungsanfragen zu verarbeiten. Dabei werden Datenbankabfragen an die Datenbanken ``sip\textunderscore buddies'' und ``dialdata\textunderscore table'' erstellt. Diese holen sich den Namen und damit die IP-Adresse des Empfängers, um mit dieser ein Telefonat über das 
+Danach folgt die Implementierung einer generische Variante, welche versucht jegliche eingehenden Verbindungsanfragen zu verarbeiten. Dabei werden Datenbankabfragen an die Tabellen ``sip\textunderscore buddies'' und ``dialdata\textunderscore table'' erstellt. Diese holen sich den Namen und damit die IP-Adresse des Empfängers, um mit dieser ein Telefonat über das 
 Protokoll \SIP aufzubauen. Die Konfiguration hierfür sieht folgendermaßen aus:
 \begin{lstlisting}
 exten => _N.,1,Set(Name=${ODBC_SQL(select dial from 
@@ -86,7 +86,7 @@ exten => _N.,n,Dial(SIP/${Name}@${IPAddr}:5062)
 
 \subsection{Inbetriebnahme}
 \label{sec:inbetriebnahme}
-Nach erfolgreichem Starten der Dienste von \OpenBTS und Asterisk konnten erste Tests durchgeführt werden. Dafür ist das Asterisk-\CLI eine gute Möglichkeit. Diese kann durch den Befehl \inlinecode{sudo asterisk -rvvv} gestartet werden. Sie bietet beispielsweise ein Kommando zum versenden von SMS an Netzwerkteilnehmer, welche wie folgt aussieht:\\ \\
+Nach erfolgreichem Starten der Dienste von \OpenBTS und Asterisk konnten erste Tests durchgeführt werden. Dafür ist das Asterisk-\CLI eine gute Möglichkeit. Diese kann durch den Befehl \inlinecode{sudo asterisk -rvvv} gestartet werden. Sie bietet beispielsweise ein Kommando zum Versenden von SMS an Netzwerkteilnehmer, welche wie folgt aussieht:\\ \\
 \inlinecode{sendsms IMSI Nachricht}\\ \\
 und kann beispielsweise folgendermaßen aussehen:\\ \\
 \inlinecode{sendsms 262011234567891 Hallo, das ist eine Test-SMS!}\\ \\

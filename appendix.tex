@@ -1,0 +1,58 @@
+\appendix
+\section{Skript für die Einträge in die Datenbanken}
+\label{app:A}
+Folgendes Skript trägt ausgewählte IMSIS mit Rufnummern in die Datenbanken ``sip\textunderscore buddies'' und ``dialdata\textunderscore table'':
+
+\begin{lstlisting}
+sqlite3 /var/lib/asterisk/sqlite3dir/sqlite3.db
+
+INSERT INTO sip_buddies (id, name, context, host, 
+  callerid, dtmfmode, allow, ipaddr, port, username,
+  canreinvite) 
+VALUES (5, 'IMSI262011234567891', 'phones', 
+  'dynamic', '2101','info', 'gsm','127.0.0.1',5062,
+  'IMSI262011234567891','no');
+  
+INSERT INTO sip_buddies (id, name, context, host, 
+  callerid, dtmfmode, allow, ipaddr, port, username
+  , canreinvite) 
+VALUES (6, 'IMSI262012345678912', 'phones', 
+  'dynamic', '2102','info', 'gsm','127.0.0.1',5062,
+  'IMSI262012345678912','no');
+  
+INSERT INTO sip_buddies (id, name, context, host,
+  callerid, dtmfmode, allow, ipaddr, port, username
+  , canreinvite) 
+VALUES (7, 'IMSI262013456789123', 'phones', 
+  'dynamic', '2107','info', 'gsm','127.0.0.1',5062,
+  'IMSI262013456789123','no');
+  
+INSERT INTO sip_buddies (id, name, context, host,
+  callerid, dtmfmode, allow, ipaddr, port, username
+  , canreinvite) 
+VALUES (8, 'IMSI262074567891234', 'phones', 
+  'dynamic', '2108','info', 'gsm','127.0.0.1',5062,
+  'IMSI262074567891234','no');
+  
+INSERT INTO sip_buddies (id, name, context, host,
+  callerid, dtmfmode, allow, ipaddr, port, username
+  , canreinvite) 
+VALUES (9, 'IMSI262015678912345', 'phones', 
+  'dynamic', '2109','info', 'gsm','127.0.0.1',5062,
+  'IMSI262015678912345','no');
+
+INSERT INTO dialdata_table VALUES(5,2101,
+  'IMSI262011234567891');
+
+INSERT INTO dialdata_table VALUES(6,2102,
+  'IMSI262012345678912');
+
+INSERT INTO dialdata_table VALUES(7,2107,
+  'IMSI262013456789123');
+
+INSERT INTO dialdata_table VALUES(8,2108,
+  'IMSI262074567891234');
+
+INSERT INTO dialdata_table VALUES(9,2109,
+  'IMSI262015678912345');
+\end{lstlisting}
