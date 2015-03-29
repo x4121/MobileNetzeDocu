@@ -16,14 +16,14 @@ Bei der Implementierung wurde Widok\footnote{https://widok.github.io/} als Frame
 Die Software setzt sich aus den Controllern \emph{Index}, \emph{Sending}, \emph{Users} und den Models \emph{Socket} sowie \emph{User} zusammen. Die Controller werden im verwendeten Framework Pages genannt und erzeugen auch das angezeigte HTML. Die Abgrenzung zwischen View und Controller findet innerhalb der Page-Klasse statt und übernimmt beide Aufgaben. Die Pages stellen das User-Interface zur Verfügung und übernehmen den Datenaustausch mit den Models.
 
 \FloatBarrier
-\subsubsection*{Die Index Klasse} ist die Startseite und, wie in \autoref{fig:view_main} dargestellt, dort wird nur die Navigation und eine Willkommensnachricht generiert. 
+\subsubsection*{Die Index Klasse} ist die Startseite und soll nur als Einstiegspunkt dienen. Dort wird die Navigation und eine Willkommensnachricht generiert, wie in Abbildung \autoref{fig:view_main} dargestellt.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewMain.png}
 	\caption{Startseite des Frontends}
 	\label{fig:view_main}
 \end{figure}
-Dies soll nur als Einstiegspunkt dienen. Die eigentliche Funktionalität bieten die Klassen \emph{Sending} und \emph{Users} an. 
+Die eigentliche Funktionalität bieten die Klassen \emph{Sending} und \emph{Users} an. 
 
 \FloatBarrier
 \subsubsection*{Die Users Klasse} erzeugt die Seite, auf der die aktiven und inaktiven Teilnehmer des Netzwerkes angezeigt werden (siehe \autoref{fig:view_user}). 
@@ -63,4 +63,4 @@ Die zweite Model-Klasse User stellt nur einen Wrapper um die Socket Klasse dar, 
 
 \FloatBarrier
 \subsubsection*{Die Benutzerverwaltung}
-wurde nur rudimentär implementiert. Der aktuelle Nutzer kann durch Auswahl dessen unter Login in der Navigation (siehe \autoref{fig:view_main}) gewählt werden. Auf eine komplexere Verwaltung mit Passwörtern und Rollen wurde verzichtet.
+wurde nur rudimentär implementiert. Der Login erfolgt durch die Auswahl des Benutzers im Loginmenü, welches in der Navigation zu finden ist. Auf eine komplexere Verwaltung mit Passwörtern und Rollen wurde verzichtet.
