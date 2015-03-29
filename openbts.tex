@@ -1,20 +1,19 @@
 \section{Aufgabenstellung}
 \label{sec:aufgabe}
 
-Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetzes mit GSM.
+Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetz mit GSM.
 Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research}\footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit \OpenBTS ein \GSM-Netz aufsetzten.
 
 \section{OpenBTS}
 \label{sec:openbts}
 
-\OpenBTS\footnote{\url{http://openbts.org}} ist ein Open Source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
+\OpenBTS\footnote{\url{http://openbts.org}} ist ein open source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
 
 \subsection{Installation}
 \label{sec:installation}
 
-Zur Installation und initialen Einrichtung von \OpenBTS haben wir uns weitestgehend an die Anleitung des \OpenBTS-Git-Repositorys\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version \todo{Den Teufel beim Namen nennen: 10.3 oder was war da drauf?} auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr stabil lief, mussten wir diesen zunächst neu aufsetzen. 
-Anschließend installierten wir Git und klonten das Git-Repository mit allen Abhängigkeiten auf den Laborrechner, wählten den aktuellen Branch aus und kompilierten diese für unsere \USRP.\\
-Während dem Kompilieren fiel auf, dass anscheinend nicht alle benötigten Treiber mit dem Repository geladen und installiert werden. Dies ließ sich durch eine kurze Google-Suche beheben\footnote{\url{http://code.ettus.com/redmine/ettus/projects/uhd/wiki/UHD_Linux}}\todo{Die benötigten Kompilierungsanweisungen lauten: }.
+Zur Installation und initialen Einrichtung von \OpenBTS haben wir uns weitestgehend an die Anleitung des \OpenBTS-Git-Repository\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
+Abhängigkeiten auf den Laborrechner geklont, den aktuellen Branch ausgewählt und für unsere \USRP kompiliert.\\Während dem Kompilieren fiel auf, dass anscheinend nicht alle benötigten Treiber mit dem Repository geladen und installiert werden. Dies ließ sich aber auch durch eine kurze Google-Suche beheben\footnote{\url{http://code.ettus.com/redmine/ettus/projects/uhd/wiki/UHD_Linux}}.
 
 \begin{lstlisting}[language=bash]
 sudo apt-get install git
@@ -40,16 +39,16 @@ sudo dpkg -i *.deb
 sudo apt-get -f install
 \end{lstlisting}
 
-Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komponenten in Upstart eingetragen wurden, konnte man auch einfach den Laborrechner \todo{oder die Dienste über den deren Servicenamen nach dem Schema \inlinecode{service SERVICE\_NAME restart}} neustarten.
+Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komponenten in Upstart eingetragen wurden, konnte man auch einfach den Laborrechner neustarten.
 
 \subsection{Konfiguration}
 \label{sec:konfiguration}
-Vor der Inbetriebnahme der Basisstation musste diese auf die gewünschten Bedürfnisse eingestellt werden. Insbesondere betraf dies der Konfiguration von \OpenBTS und Asterisk. Die Software \OpenBTS lässt sich generell über die Datei ``openBts.conf''\todo{nicht wirklich, die im config-Verzeichnis stammmt von mir und war für die Fehlersuche. Die Konfiguration findet m.~E. über das CLI statt.]} konfigurieren. Hierin sind alle Einstellungen für die Basisstation zu sehen. Asterisk kann durch die Datei ``extensions.conf'' konfiguriert werden. Diese Datei ermöglicht es ein wenig Geschäftslogik umzusetzen, indem bestimmten Rufnummernmustern eine verschiedene Verarbeitung zugeordnet werden. \\
+Vor der Inbetriebnahme der Basisstation musste diese auf die gewünschten Bedürfnisse eingestellt werden. Insbesondere betraf das die Konfiguration von \OpenBTS und Asterisk. Die Software \OpenBTS lässt sich generell über die Datei ``OpenBTS.conf'' konfigurieren. Hierin sind alle Einstellungen für die Basisstation zu sehen. Asterisk kann durch die Datei ``extensions.conf'' eingestellt werden. Diese Datei ermöglicht es ein wenig Geschäftslogik umzusetzen, indem bestimmten Rufnummernmustern eine verschiedene Verarbeitung zugeordnet wird. \\
 
 \subsubsection{Konfiguration von OpenBTS}
-Als erstes sollte das Frequenzband eingestellt werden, um nicht unbeabsichtigt auf bereits reservierten Bändern zu kommunizieren.  Der für die Hochschule gültige Frequenzbereich kann aus dem entsprechendem Lizenzdokument entnommen werden. Mit Hilfe des Feldes \inlinecode{GSM.Radio.Band} wird das Band\todo{Basisband?} eingestellt. Die genaue Frequenz wird durch die Kanalnummer (\ARFCN) über die Option \inlinecode{GSM.Radio.C0} festgelegt. Diese kann durch die Frequenz folgendermaßen errechnet werden:\\ \\
+Als erstes sollte das Frequenzband eingestellt werden, um nicht unbeabsichtigt auf bereits reservierten Bändern zu kommunizieren.  Der für die Hochschule gültige Frequenzbereich kann aus dem entsprechendem Lizenzdokument entnommen werden. Mit Hilfe des Feldes \inlinecode{GSM.Radio.Band} kann das Band eingestellt werden. Die genaue Frequenz wird dann durch die Kanalnummer (\ARFCN) durch \inlinecode{GSM.Radio.C0} festgelegt. Die Kanalnummer kann durch die Frequenz folgendermaßen zurück gerechnet werden:\\ \\
 $ C0 = \frac{Uplinkfrequenz - Basisfrequenz}{0.2} + Basiskanalnummer $ \\ \\
-In unserem Fall galt die Lizenz auf dem Uplink für die Frequenz \SI{1781.2}{\mega\hertz}. Dadurch befinden wir uns im Band 1800 mit der Basisfrequenz von \SI{1710.2}{\mega\hertz}. Die Basiskanalnummer beträgt in diesem Band 512, wodurch sich für uns folgende Kanalnummer ergab:\\ \\
+In unserem Fall war die Lizenz auf dem Uplink mit der Frequenz \SI{1781.2}{\mega\hertz} festgelegt. Dadurch befinden wir uns im Band 1800 mit der Basisfrequenz von 1710.2. Die Basiskanalnummer beträgt in diesem Band 512, wodurch sich für uns folgende Kanalnummer ergab:\\ \\
 $ C0 = \frac{1781.2 - 1710.2}{0.2} + 512 = 867 $ \\ \\
 Danach wurden der \MCC, \MNC sowie der Name der Basisstation konfiguriert. Der \MCC gibt an, in welchem Land die Basistation betrieben wird. Der \MNC spiegelt wiederum den Betreiber wider. Der \MCC für Deutschland lautet 262. Diese Codes können entsprechend durch die Felder \inlinecode{GSM.Identity.MCC} und \inlinecode{GSM.Identity.MNC} angegeben werden. Der Name der Basisstation wird durch das Feld \inlinecode{GSM.Identity.ShortName} definiert und bei der Suche nach einem Netzwerk beim Endgerät angezeigt. \\
 Die Basisstation sollte so eingestellt werden, dass sie nur vordefinierte \acp{IMSI} akzeptiert und nur zu diesen eine Verbindung aufbaut. Ansonsten verbinden sich alle in der Nähe befindlichen Endgeräte mit dieser Basisstation, falls sie die einzige verfügbare in der Nähe ist. Um nur ausgewählte \acp{IMSI} zu zulassen kann ein regulärer Ausdruck in das Feld \inlinecode{Control.LUR.OpenRegistration} eingetragen werden. Dieser Ausdruck sah in unserem Fall folgendermaßen aus: \\
@@ -57,7 +56,7 @@ Die Basisstation sollte so eingestellt werden, dass sie nur vordefinierte \acp{I
 (262011234567891)|(262012345678912)|(262013456789123)|
 (262074567891234)|(262015678912345)
 \end{lstlisting}
-Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC verwendet werden. Dazu müssten man jedoch eigene SIM-Karten herstellen (wie zum Beispiel der \CCC mit einer \MNC von 42). Dadurch kann der reguläre Ausdruck einfach auf die \MNC hin eingestellt werden, wodurch sie nicht bei jeder neuen \IMSI geändert werden muss.\todo{Oder man lässt es einfach weg, um anderen Kunden sein Netz per Roaming bereitzustellen.}
+Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC verwendet werden. Dazu müssten man jedoch eigene SIM-Karten herstellen (wie zum Beispiel das CCC mit einer \MNC von 42). Dadurch kann der reguläre Ausdruck einfach auf die MNC hin eingestellt werden, wodurch sie nicht bei jeder neuen \IMSI geändert werden muss.
 
 
 \subsubsection{Konfiguration von Asterisk}
@@ -113,7 +112,7 @@ Nach tagelangem Konfigurieren ließ sich zwar keine Verbesserung in der Zustellr
 Die Ursache hierfür lag demnach in der zu hohen Sendeleistung der Basisstation.
 
 Durch ein Absenken der voreingestellten minimalen (\emph{GSM.MS.Power.Min}) und maximalen (\emph{GSM.MS.Power.Max}) Leistungsgrenzen in der Konfiguration von \SI{5}{\dBm} beziehungsweise \SI{33}{\dBm} auf \SI{0}{\dBm} respektive \SI{1}{\dBm} verbesserte sich der Verbindungsaufbau nochmals. 
-Die im Labor beste Verbindungsrate konnte durch das zusätzliche Anbringen eines Dämpfungsglieds von \SI{10}{\decibel} an der Transmit-Antenne und der vorhin genannten Leistungsgrenzen erzielt werden. 
+Die im Labor beste Verbindungsrate konnte durch das zusätzliche Anbringen eines Dämpfungsglieds von \SI{10}{\dB} an der Transmit-Antenne und der vorhin genannten Leistungsgrenzen erzielt werden. 
 In \autoref{fig:attenuator} ist das montierte Dämpfungsglied an der Antennenbuchse \emph{RF~1} zu erkennen.
 
 \begin{figure}[h!]
