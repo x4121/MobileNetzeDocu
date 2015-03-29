@@ -12,11 +12,11 @@ Das Frontend soll folgende Benutzerschnittstellen bereit stellen:
 \end{itemize}
 
 \subsection{Umsetzung}
-Bei der Implementierung wurde Widok\footnote{https://widok.github.io/} als Framework verwendet. Dieses erleichtert das Routing und ermöglicht das Generieren von HTML aus Scala-Code.
+Bei der Implementierung wurde Widok\footnote{\url{https://widok.github.io/}} als Framework verwendet. Dieses erleichtert das Routing und ermöglicht das Generieren von HTML aus Scala-Code.
 Die Software setzt sich aus den Controllern \emph{Index}, \emph{Sending}, \emph{Users} und den Models \emph{Socket} sowie \emph{User} zusammen. Die Controller werden im verwendeten Framework Pages genannt und erzeugen auch das angezeigte HTML. Die Abgrenzung zwischen View und Controller findet innerhalb der Page-Klasse statt und übernimmt beide Aufgaben. Die Pages stellen das User-Interface zur Verfügung und übernehmen den Datenaustausch mit den Models.
 
 \FloatBarrier
-\subsubsection*{Die Index Klasse} ist die Startseite und soll nur als Einstiegspunkt dienen. Dort wird die Navigation und eine Willkommensnachricht generiert, wie in Abbildung \autoref{fig:view_main} dargestellt.
+\subsubsection*{Die Index Klasse} ist die Startseite und soll nur als Einstiegspunkt dienen. Dort wird die Navigation und eine Willkommensnachricht generiert, wie in \autoref{fig:view_main} dargestellt.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewMain.png}
@@ -55,7 +55,7 @@ In der ersten Zeile wird ein Teilnehmer ausgewählt, an den gesendet werden soll
 
 \FloatBarrier
 \subsubsection*{Die Model Klassen}
-stellen die Brücke zwischen Backend (Kap. \ref{sec:backend}) und Frontend dar. Die angezeigten Daten werden vom Backend bereit gestellt und über Websockets übertragen. Diese Übertragungsmethode wurden ausgewählt, da dadurch kein vollwertiger Webserver benötigt wird und dies die Entwicklung vereinfacht. Die mit dem Backend ausgetauschten Daten werden im \JSON-Format übertragen. Für den Aufbau der Nachrichten siehe Kapitel \ref{subsec:json}. 
+stellen die Brücke zwischen Backend (siehe \autoref{sec:backend}) und Frontend dar. Die angezeigten Daten werden vom Backend bereit gestellt und über Websockets übertragen. Diese Übertragungsmethode wurden ausgewählt, da dadurch kein vollwertiger Webserver benötigt wird und dies die Entwicklung vereinfacht. Die mit dem Backend ausgetauschten Daten werden im \JSON-Format übertragen. Für den Aufbau der Nachrichten siehe \autoref{subsec:json}. 
 
 Die Kommunikation wird dabei von der Socket-Klasse durchgeführt, die periodisch mit dem Backend Kommuniziert und die Daten aktualisiert.
 Die Socket-Klasse übernimmt die grundsätzliche Kommunikation, so wie das Aufbauen einer Verbindung und das Umwandeln von \JSON zu Scala-Klassen beim Empfangen und umgekehrt beim Senden. Des Weiteren stellt es Events zur Verfügung, welche bei Empfangen von Daten ausgelöst werden.
