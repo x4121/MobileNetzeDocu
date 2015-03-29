@@ -4,6 +4,41 @@
 Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetz mit GSM.
 Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research}\footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit \OpenBTS ein \GSM-Netz aufsetzten.
 
+\subsection{Projektumfang}
+Zu Beginn der Projektarbeit haben wir Ideen gesammelt, welche für ein fakultätseigenes Mobilfunknetz sinnvoll sein könnten.
+Nachdem wir dann in der ersten Praktikumswoche ein lauffähiges Grundsystem eingerichtet hatten und  uns eine ungefähre Vorstellung von der theoretischen und zeitlichen Umsetzbarkeit unserer Ideen verschaffen konnten, haben wir uns auf die Funktionen in Abbildung \ref{fig:uml_usecase} geeinigt.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{\picdir usecases_uml.png}
+    \caption{Use Case Diagramm: Funktionen des Mobilfunknetzes}
+    \label{fig:uml_usecase}
+\end{figure}
+
+Im Detail sind diese:
+\begin{description}
+    \item[Initiale Nummer vergeben] \hfill \\
+        Benutzer sollen nach der Anmeldung im \GSM-Netz ihre eigene Nummer wählen können.
+        Dies geschieht, indem sie mit der gewünschten Nummer auf die Willkommensnachricht antworten.
+        Daraufhin sollen sie unter dieser Nummer für andere Benutzer erreichbar sein.
+    \item[Eigene Nummer ändern] \hfill \\
+        Benutzer sollen ihre eigene Nummer nachträglich ändern können.
+        Diese Funktionalität soll über ein komfortables Webinterface bereit gestellt werden.
+    \item[Andere Benutzer anrufen] \hfill \\
+        Als Grundfunktionalität eines \GSM-Netzes soll es natürlich möglich sein andere Teilnehmer des Netzes anzurufen.
+        Dies soll über die von den Benutzern selbst gewählten Nummern möglich sein.
+    \item[Namen zu Nummer eintragen] \hfill \\
+        Um die Bedienung des Webinterfaces leichter und persönlicher zu gestellten, sollen Benutzer in diesem ihren Namen zur gewählten Nummer hinterlegen und ändern können.
+        Dies soll ebenfalls im Webinterface möglich sein.
+    \item[Aktive Benutzer sehen] \hfill \\
+        Da nur im \GSM-Netz eingewählte Personen erreichbar sind, soll im Webinterface sichtbar sein, wer aktuell im Netz angemeldet ist.
+        Zusätzlich soll man sehen können, wann nicht anwesende Benutzer das letze mal angemeldet waren.
+    \item[Mehrere Benutzer benachrichtigen] \hfill \\
+        Benutzer sollen zum einen die Möglichkeit haben, wie in jedem anderen \GSM-Netz auch, andere Teilnehmer per \SMS-Nachricht zu kontaktieren.
+        Zusätzlich soll es aber auch möglich sein, Nachrichten an mehrere Benutzer gleichzeitig zu senden.
+        Dies soll ebenfalls über das Webinterface möglich sein.
+\end{description}
+
 \section{OpenBTS}
 \label{sec:openbts}
 

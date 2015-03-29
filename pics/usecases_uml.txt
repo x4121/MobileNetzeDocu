@@ -2,12 +2,12 @@
 left to right direction
 skinparam packageStyle rect
 actor Benutzer
-rectangle System {
+rectangle GSM-Netz {
     Benutzer -- (Initiale Nummer vergeben)
     Benutzer -- (Eigene Nummer ändern)
+    Benutzer -- (Andere Benutzer anrufen)
     Benutzer -- (Namen zu Nummer eintragen)
     Benutzer -- (Aktive Benutzer sehen)
-    Benutzer -- (Andere Benutzer anrufen)
     Benutzer -- (Mehrere Benutzer benachrichtigen)
 }
 @enduml
