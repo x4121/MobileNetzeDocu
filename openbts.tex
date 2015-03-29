@@ -59,13 +59,13 @@ Möchte man diese Basisstation professionell betreiben, sollte eine eigene \MNC 
 \subsubsection{Konfiguration von Asterisk}
 Asterisk ist für die Verarbeitung von eingehenden Daten (wie Anrufen, SMS, usw.) verantwortlich. Es vergibt auch Rufnummern an die bestimmten Netzwerkteilnehmer. Asterisk liefert eine SQLite-Datenbank mit, welche diese Daten beinhaltet. Zu Testzwecken wurde diese Datenbank zunächst manuell durch ein Skript befüllt. Dieses Skript ist in Anhang ?? zu finden. Für jede \IMSI wird ein Eintrag in die Tabelle ``sip\textunderscore buddies'' getätigt, wodurch diese IMSI dann im System als registriert gilt. Außerdem wird in die Tabelle ``dialdata\textunderscore table'' noch für jede registrierte IMSI eine Rufnummer vergeben, unter welcher diese dann im Netzwerk ansprechbar ist. Später wurde diese Aufgabe durch unsere Applikation übernommen. Die Datenbank ist unter \textit{/var/lib/asterisk/sqlite3dir/sqlite3.db} zu finden. \\
 Zuletzt muss in der Datei ``extensions.conf'' das Verhalten bei eingehenden Anrufen definiert werden. Dies kann anhand von Rufnummernmustern geschehen. Dabei werden bestimmten Rufnummern ein bestimmter Ablauf zu geordnet. Zu Testzwecken wurde der Nummer 222 eine ``Hello World''-Wiedergabe zugeordnet. Dafür wurde folgender Eintrag der \inlinecode{[phones]} Sektion hinzugefügt:
-\begin{tabbing}$
-exten => 222,\hspace{1cm} \= 1,Answer()\\
-\> same => n,Wait(4)\\
-\> same => n,Playback(hello-world)\\
-\> same => n,Wait(4)\\
-\> same => n,Hangup\\ $
-\end{tabbing}
+\begin{lstlisting}
+exten => 222,   1,Answer()
+                same => n,Wait(4)
+                same => n,Playback(hello-world)
+                same => n,Wait(4)
+                same => n,Hangup
+\end{lstlisting}
 
 \subsection{Inbetriebnahme}
 \label{sec:inbetriebnahme}
