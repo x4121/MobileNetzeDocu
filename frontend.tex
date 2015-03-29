@@ -30,26 +30,25 @@ Dies soll nur als start dienen, die eigentliche Funktionalität bieten die Klass
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewUsers.png}
-	\caption{View auf der die Benutzer angezeigt werden}
+	\caption{Übersicht über die GSM Teilnehmer}
 	\label{fig:view_user}
 \end{figure}
-Auf dieser Seite können auch die Daten der jeweiligen Benutzer angepasst werden. Die anzupassenden Daten sind die Telefonnumer und der Anzeigename.
-Das Ändern der Einstellungen ist in Abbildung \ref{fig:view_user_settings} zu erkennen.
+Auf dieser Seite können auch die Daten der jeweiligen Benutzer angepasst werden. Das Ändern der Einstellungen ist in Abbildung \ref{fig:view_user_settings} zu erkennen.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewUsersSettings.png}
-	\caption{Modal zum ändern der Benutzereinstellungen}
+	\caption{Benutzereinstellungen}
 	\label{fig:view_user_settings}
 \end{figure}
-Es ist auf dieser Seite auch möglich Benutzer zu löschen und auch direkt SMS an einzelne Benutzer zu senden.
+Es ist auf dieser Seite auch möglich Benutzer zu löschen und direkt SMS an einzelne Benutzer zu senden.
 
 \FloatBarrier
 \subsubsection*{Die Sending Klasse}
-ermöglicht das Senden einer Nachricht an mehrere Benutzer gleichzeitig. Die Benutzeroberfläche dieser Seite ist in Abbildung \ref{fig:view_sending} dargestellt.
+ermöglicht das Senden einer Nachricht an mehrere Benutzer gleichzeitig und ist in Abbildung \ref{fig:view_sending} dargestellt.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewSending.png}
-	\caption{Seite zum versenden mehrere SMS}
+	\caption{Oberfläche zum versenden von SMS}
 	\label{fig:view_sending}
 \end{figure}
 In der ersten Zeile wird ein Teilnehmer ausgewählt, an den gesendet werden soll, welcher mit einem Klick auf Add zur Liste der Empfänger hinzugefügt wird. Die beiden Buttons All und Active erlauben das hinzufügen aller bzw. nur der Aktiven Teilnehmer. Im unteren Feld wird die Nachricht eingegeben, welche mit Klick auf Send über das Backend an die ausgewählten Empfänger übermittelt wird.
