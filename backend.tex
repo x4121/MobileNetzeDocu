@@ -1,10 +1,10 @@
 \section{OpenBTS Webservice Backend}
 \label{sec:backend}
-Das Backend für die Webanwendung wurde in C++ in Verbindung mit der Bibliothek Qt\footnote{Qt-Project: \url{http://qt project.org/}} erstellt. Diese wurde gewählt, da sie alle wichtigen Implementierungen, die in diesem Projekt verwendet wurden, mitbringt. Die genutzten Bibliotheken sind vor allem die Unterstützung von Websockets mit \JSON, sowie eine gute Datenbankanbindung. Da die Websocket Implementierung erst seit der neuen Version 5.4 verfügbar ist muss diese oder eine höhere genutzt werden. Zum Übersetzen wird C++11 verwendet, was allerdings in der Projektkonfiguration bereits voreingestellt ist. Auf der Webseite \url{http://doc.qt.io/qt-5/} sind verschiedene Dokumentation, unter anderem der \API für Qt abrufbar.
+Das Backend für die Webanwendung wurde in C++ in Verbindung mit der Bibliothek Qt\footnote{Qt-Project: \url{http://qt project.org/}} erstellt. Diese wurde gewählt, da sie alle wichtigen Implementierungen mitbringt, die in diesem Projekt verwendet wurden. Die genutzten Bibliotheken sind vor allem die Unterstützung von Websockets mit \JSON sowie eine gute Datenbankanbindung. Da die Websocket Implementierung erst seit der neuen Version 5.4 verfügbar ist, muss diese oder eine höhere genutzt werden. Zum Übersetzen wird C++11 verwendet, was allerdings in der Projektkonfiguration bereits voreingestellt ist. Auf der Webseite \url{http://doc.qt.io/qt-5/} sind verschiedene Dokumentation, unter anderem der \API für Qt abrufbar.
 
 \subsection{Anforderungen}
 
-Aufgabe des Backends ist es Befehle in Form von \JSON Nachrichten der Weboberfläche entgegenzunehmen und daraus resultierend entweder einen Datenbankzugriff durchzuführen oder einen Befehl mit Hilfe des \CLI an die \OpenBTS Software zu schicken.
+Aufgabe des Backends ist es Befehle in Form von \JSON-Nachrichten der Weboberfläche entgegenzunehmen und daraus resultierend entweder einen Datenbankzugriff durchzuführen oder einen Befehl mit Hilfe des \CLI an die \OpenBTS Software zu schicken.
 
 Die Befehle, die unterstützt werden sollen sind:
 
@@ -12,12 +12,12 @@ Die Befehle, die unterstützt werden sollen sind:
 	\item Alle Benutzter abrufen
 	\item Name und Telefonnummer eines Benutzers setzen bzw. verändern
 	\item Einen Benutzer löschen
-	\item Eine oder mehrere \SMS verschicken
+	\item Eine oder mehrere \SMS-Nachrichten verschicken
 \end{itemize}
 
 \subsection{Architektur}
 
-Das Backend akzeptiert \JSON Anfragen über ein Websocket und verarbeitet diese entsprechend. Um Einstellungen für das Programm, wie beispielsweise die Pfade der Datenbanken oder den \SMS Befehl vorzugeben wird die Qt Klasse \textit{QSettings} verwendet, mit der die Einstellungen in einer Datei verwaltet werden können. Dabei stehen die jeweiligen Einstellungen als Klartext in der Datei, sodass diese bei Bedarf vor dem Start des Backends von Hand angepasst werden können.
+Das Backend akzeptiert \JSON-Anfragen über ein Websocket und verarbeitet diese entsprechend. Um Einstellungen für das Programm, wie beispielsweise die Pfade der Datenbanken oder den \SMS-Befehl vorzugeben, wird die Qt-Klasse \textit{QSettings} verwendet, mit der die Einstellungen in einer Datei verwaltet werden können. Dabei stehen die jeweiligen Einstellungen als Klartext in der Datei, sodass diese bei Bedarf vor dem Start des Backends von Hand angepasst werden können.
 
 Für das Backend wurden zwei Klassen und eine Struktur implementiert. Diese sind mit den relevanten Methoden in Abbildung \ref{fig:uml_class} als \UML Klassendiagramm dargestellt.
 \begin{figure}[h!]
@@ -29,24 +29,24 @@ Für das Backend wurden zwei Klassen und eine Struktur implementiert. Diese sind
 
 \subsubsection*{Main Methode}
 
-In der Main Methode wird zu Beginn getestet, ob bereits eine \textit{settings.ini} Datei mit den Einstellungen für das Backend existiert. Ist dies nicht der Fall wird zuallererst eine Datei mit voreingestellten Standartwerten erzeugt. Anschließend wird ein Objekt der Klasse Socket (siehe \ref{sssec:classsocket}) mit dem Port aus den Einstellungen instantiiert. Zum Abschluss wird die Qt eigene Event Loop (siehe \textit{QCoreApplication}) gestartet, durch die der weitere Programmablauf geregelt wird.
+In der Main Methode wird zu Beginn getestet, ob bereits eine \textit{settings.ini} Datei mit den Einstellungen für das Backend existiert. Ist dies nicht der Fall, wird zuallererst eine Datei mit voreingestellten Standartwerten erzeugt. Anschließend wird ein Objekt der Klasse Socket (siehe Abschnitt \ref{sssec:classsocket}) mit dem Port aus den Einstellungen instantiiert. Zum Abschluss wird die Qt-eigene Eventloop (siehe \textit{QCoreApplication}) gestartet, die den weitere Programmablauf regelt.
 
 \subsubsection*{Struktur BTSUser}
-Die Struktur dient als Transportklasse für einen einzelnen User des \OpenBTS Systems. Sie beinhaltet neben den Objektvariablen zwei Helfermethoden, die zum Erzeugen der Objekte aus \JSON oder einem Datenbankeintrag dienen sowie eine weitere Methode, die das Objekt in ein \textit{QJsonObject} umwandelt.
+Die Struktur dient als Transportklasse für einen einzelnen User des \OpenBTS Systems. Sie beinhaltet neben den Objektvariablen zwei Hilfsmethoden, die zum Erzeugen der Objekte aus \JSON oder einem Datenbankeintrag dienen sowie eine weitere Methode, die das Objekt in ein \textit{QJsonObject} umwandelt.
 
 
 \subsubsection*{Klasse Socket}
 \label{sssec:classsocket}
-Ein Objekt der Klasse Socket ist das Herzstück dieser Anwendung. Es öffnet beim Erzeugen einen \textit{QWebSocket} auf dem übergebenen Port und verbindet die entsprechenden Signale über das Qt eigene Signal \& Slot Prinzip mit den dafür vorgesehenen Funktionen.
+Ein Objekt der Klasse Socket ist das Herzstück dieser Anwendung. Es öffnet beim Erzeugen einen \textit{QWebSocket} auf dem übergebenen Port und verbindet die entsprechenden Signale über das Qt-eigene Signal \& Slot Prinzip mit den dafür vorgesehenen Funktionen.
 
 Dadurch wird bei jedem neu verbundenen Client die Methode \inlinecode{newConnection()} aufgerufen, welche die neue Verbindung akzeptiert, zur Liste der bekannten Clients hinzufügt und die Verbindung zur \inlinecode{processTextMessage(QString)} Methode erzeugt. Diese wird aufgerufen, sobald eine neue Nachricht vom Client empfangen wird. Diese Nachricht wird nun zuerst in ein \textit{QJsonDocument} Objekt geparst und anschließend die zum Befehl passende Methode ausgeführt. Eine Übersicht über die erlaubten Befehle und jeweils eine kurze Beschreibung ist im Abschnitt \ref{subsec:json} zu finden.
 
 
 \subsubsection*{Klasse DataBase}
 
-Die Klasse \textit{DataBase} kapselt alle Zugriffe auf die verwendeten Datenbanken. Hierzu wird die Qt interne Bibliotheksklasse \textit{QSQLDatabase} verwendet. Diese bietet unter anderen Unterstützung für die, unter \OpenBTS verwendeten SQLite3 Datenbanken. Die jeweiligen Anfragen werden durch \SQL Querys ausgeführt, die mit Hilfe von \textit{Prepared Statements} erzeugt werden.
+Die Klasse \textit{DataBase} kapselt alle Zugriffe auf die verwendeten Datenbanken. Hierzu wird die Qt interne Bibliotheksklasse \textit{QSQLDatabase} verwendet. Diese bietet unter anderem Unterstützung für die, unter \OpenBTS verwendeten SQLite3 Datenbanken. Die jeweiligen Anfragen werden durch \SQL Querys ausgeführt, die mit Hilfe von \textit{Prepared Statements} erzeugt werden.
 
-OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien. In diesem Projekt sind davon die Dateien \textit{sqlite3.db} und \textit{TMSITable.db} relevant. Diese sind schematisch in Abbildung \ref{fig:database_er} dargestellt und im Folgenden näher erläutert.
+\OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien. In diesem Projekt sind davon die Dateien \textit{sqlite3.db} und \textit{TMSITable.db} relevant. Diese sind schematisch in Abbildung \ref{fig:database_er} dargestellt und werden im Folgenden näher erläutert.
 
 \begin{figure}[h!]
 	\centering
@@ -62,20 +62,20 @@ OpenBTS mit Asterisk verwendet zur Verwaltung unterschiedliche Datenbankdateien.
 \begin{itemize}
 	\item \textit{DIALTABLE\_DATA} enthält die Zuordnungen der eindeutigen id zu einer \IMSI sowie zu einer frei konfigurierbaren Telefonnummer.
 	
-	\item \textit{SIP\_BUDDIES} enthält ebenfalls die id, die \IMSI sowie die Telefonnummer. In dieser Tabelle sind jedoch viele weitere Optionen konfiguriert, die vor allem für den Betrieb mit IP-Telefonie und dem \SIP dienen. Obwohl hier eine Redundanz enthalten ist müssen die \IMSI und die Telefonnummer für den korrekten Betrieb des \OpenBTS in beiden Tabellen konfiguriert sein.
+	\item \textit{SIP\_BUDDIES} enthält ebenfalls die id, die \IMSI sowie die Telefonnummer. In dieser Tabelle sind jedoch viele weitere Optionen konfiguriert, die vor allem für den Betrieb mit IP-Telefonie und dem \SIP dienen. Obwohl hier eine Redundanz enthalten ist, müssen die \IMSI und die Telefonnummer für den korrekten Betrieb des \OpenBTS in beiden Tabellen konfiguriert sein.
 	
-	\item \textit{USERNAME} wurde für die Zuordnung von Realnamen neu eingeführt. Sie wird beim Starten der Anwendung mit dem \SQL Befehl \inlinecode{CREATE TABLE IF NOT EXISTS}  erzeugt, falls sie noch nicht existiert. In ihr ist lediglich die Zuordnung der \textit{id} zu einem Realnamen vermerkt. Da beim Aktualisieren nicht sichergestellt ist, dass der Eintrag mit dieser \textit{id} bereits vorhanden ist, wird zuerst der Befehl \inlinecode{UPDATE} ausgeführt, der keine Änderung bewirkt, wenn der Eintrag nicht existiert. Anschließend wird \inlinecode{INSERT OR IGNORE} mit denselben Daten ausgeführt um den Eintrag anzulegen falls er noch nicht vorhanden war.
+	\item \textit{USERNAME} wurde für die Zuordnung von Realnamen neu eingeführt. Sie wird beim Starten der Anwendung mit dem \SQL Befehl \inlinecode{CREATE TABLE IF NOT EXISTS}  erzeugt, falls sie noch nicht existiert. In ihr ist lediglich die Zuordnung der \textit{id} zu einem Realnamen vermerkt. Da beim Aktualisieren nicht sichergestellt ist, dass der Eintrag mit dieser \textit{id} bereits vorhanden ist, wird zuerst der Befehl \inlinecode{UPDATE} ausgeführt, der keine Änderung bewirkt, wenn der Eintrag nicht existiert. Anschließend wird \inlinecode{INSERT OR IGNORE} mit denselben Daten ausgeführt um den Eintrag anzulegen, falls er noch nicht vorhanden war.
 \end{itemize}
 
 
-\paragraph{\textit{TMSITable.db}} hält Informationen über aktive bzw. kürzlich angemeldete Geräte. Zu diesem Zweck enthält die Tabelle \textit{TMSI\_Table} unter anderem die \IMSI und die zugewiesene \TMSI sowie den Zeitpunkt des letzten Zugriffs als Unix Zeitstempel. Da diese Datenbank das Feld \textit{id} nicht enthält erfolgt die Zuordnung zu den Datensätzen aus der \textit{sqlite3.db} Datenbank über einen Abgleich des \IMSI Feldes. Diese Datenbankdatei muss zwingend mit einem \textit{Read-only} Flag geöffnet und nach dem Auslesen sofort wieder geschlossen werden, da ansonsten Probleme mit \OpenBTS auftreten können.
+\paragraph{\textit{TMSITable.db}} hält Informationen über aktive bzw. kürzlich angemeldete Geräte. Zu diesem Zweck enthält die Tabelle \textit{TMSI\_Table} unter anderem die \IMSI und die zugewiesene \TMSI sowie den Zeitpunkt des letzten Zugriffs als Unix Zeitstempel. Da diese Datenbank das Feld \textit{id} nicht enthält erfolgt die Zuordnung zu den Datensätzen aus der \textit{sqlite3.db} Datenbank über einen Abgleich des \IMSI Feldes. Diese Datenbankdatei muss zwingend mit einem \textit{Read-only} Flag geöffnet und nach dem Auslesen sofort geschlossen werden, da ansonsten Probleme mit \OpenBTS auftreten können.
 
 \subsection{JSON Nachrichten}
 \label{subsec:json}
 
-Diese Sektion beschreibt kurz die \JSON Nachrichten, die in der Anwendung für die Kommunikation zwischen Frontend und Backend verwendet werden.
+Diese Sektion beschreibt kurz die \JSON-Nachrichten, die in der Anwendung für die Kommunikation zwischen Frontend und Backend verwendet werden.
 
-Alle \JSON Nachrichten, die vom Frontend an das Backend geschickt werden enthalten grundsätzlich ein Feld \inlinecode{cmd}, das den auszuführenden Befehl enthält. Je nachdem welcher Befehl ausgeführt werden soll sind weitere Felder erforderlich.
+Alle \JSON-Nachrichten, die vom Frontend an das Backend geschickt werden enthalten grundsätzlich ein Feld \inlinecode{cmd}, das den auszuführenden Befehl enthält. Je nachdem welcher Befehl ausgeführt werden soll sind weitere Felder erforderlich.
 
 \subsubsection*{getUsers}
 Dieser Befehl fordert eine vollständige Liste aller bekannter User an. Dies ist der einzige implementierte Befehl, der eine Antwort von Seiten des Backends erhält. Das Feld \textit{lastActive} der Antwort beinhaltet entweder einen Unix Zeitstempel oder -1, falls kein Zeitpunkt bekannt ist.
@@ -113,7 +113,7 @@ Dieser Befehl fordert eine vollständige Liste aller bekannter User an. Dies ist
 
 \subsubsection*{updateUser}
 
-Mit diesem Befehl werden die Daten eines einzelnen Benutzers aktualisiert. Sollte für diesen Benutzer noch kein Realname oder eine Telefonnummer eingetragen gewesen sein ist dieser Befehl zugleich zum Anlegen dieser Informationen zu verstehen.
+Mit diesem Befehl werden die Daten eines einzelnen Benutzers aktualisiert. Sollte für diesen Benutzer noch kein Realname oder eine Telefonnummer eingetragen gewesen sein, ist dieser Befehl zugleich zum Anlegen dieser Informationen zu verstehen.
 
 \begin{lstlisting}[style=json]
 {
@@ -127,7 +127,7 @@ Mit diesem Befehl werden die Daten eines einzelnen Benutzers aktualisiert. Sollt
 
 
 \subsubsection*{sendSMSBroadcast}
-Mit diesem Befehl wird eine \SMS an einen oder mehrere Empfänger gesendet. Das Feld \textit{receiver} besteht dafür aus einem \JSON Array in dem die \textit{id's} mehrerer Benutzer angegeben werden können. Das Feld \textit{sender} enthält die Telefonnummer des Absenders. Sie muss dem System nicht bekannt sein und kann frei gewählt sein.
+Mit diesem Befehl wird eine \SMS-Nachricht an einen oder mehrere Empfänger gesendet. Das Feld \textit{receiver} besteht dafür aus einem \JSON-Array in dem die \textit{id's} mehrerer Benutzer angegeben werden können. Das Feld \textit{sender} enthält die Telefonnummer des Absenders. Sie muss dem System nicht bekannt sein und kann frei gewählt werden.
 
 \begin{lstlisting}[style=json]
 {
