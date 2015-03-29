@@ -1,66 +1,66 @@
 \section{OpenBTS Webservice Frontend}
 \label{sec:frontend}
-Das Frontend unseres Projektes sollte einen einfachen Überblick über alle aktiven und angemeldeten Benutzer bieten. Zudem sollte es möglich sein SMS an einen oder mehrere der Teilnehmer zu Senden. Für die Implementierung wurde Scala.js\footnote{\url{http://www.scala-js.org/}} gewählt. Scala.js ist ein Compiler-Plugin für Scala\footnote{\url{http://www.scala-lang.org/}} welcher Scala-Code zu Javascript kompiliert. Zusätzlich wurde Bootstrap\footnote{\url{http://getbootstrap.com/}} verwendet um ein ansprechendes Interface zu erstellen.
-Die Wahl fiel auf Javascript, da Single-Page-Applications eine einfache möglichkeit darstellen um Platformübergreifende Software zu entwickeln. Die Entscheidung zu Scala.js wurde getroffen da dies Typisierung für Javascript ermöglicht und der Entwickler bereits gute Erfahrungen mit Scala gemacht hatte.
+Das Frontend unseres Projektes sollte einen einfachen Überblick über alle aktiven und angemeldeten Benutzer bieten. Zudem sollte es möglich sein \SMS-Nachrichten an einen oder mehrere der Teilnehmer zu senden. Für die Implementierung wurde Scala.js\footnote{\url{http://www.scala-js.org/}} gewählt. Scala.js ist ein Compiler-Plugin für Scala\footnote{\url{http://www.scala-lang.org/}} welcher Scala-Code zu Javascript kompiliert. Zusätzlich wurde Bootstrap\footnote{\url{http://getbootstrap.com/}} verwendet, um ein ansprechendes Interface zu erstellen.
+Die Wahl fiel auf Javascript, da Single-Page-Applications eine einfache Möglichkeit darstellen, um plattformübergreifende Software zu entwickeln. Die Entscheidung zu Scala.js wurde getroffen, da dies eine Typisierung für Javascript ermöglicht und der Entwickler bereits gute Erfahrungen mit Scala gemacht hatte.
 
 \subsection{Anforderung}
 Das Frontend soll folgende Benutzerschnittstellen bereit stellen:
 \begin{itemize}
 	\item Übersicht über aktive und inaktive Teilnehmer
 	\item Benutzerverwaltung
-	\item Senden von SMS an einzelne oder mehrere Teilnehmer
+	\item Senden von \SMS-Nachrichten an einzelne oder mehrere Teilnehmer
 \end{itemize}
 
 \subsection{Umsetzung}
 Bei der Implementierung wurde Widok\footnote{https://widok.github.io/} als Framework verwendet. Dieses erleichtert das Routing und ermöglicht das Generieren von HTML aus Scala-Code.
-Die Software setzt sich aus den Controllern Index, Sending, Users und den Models Socket, User zusammen. Die Controller werden im verwendeten Framework Pages genannt und erzeugen auch das Angezeigte HTML. Die Abgrenzung zwischen View und Controller findet innerhalb der Page Klasse statt und übernimmt beide Aufgaben. Die Pages stellen das User-Interface zur Verfügung und übernehmen den Datenaustausch mit den Models.
+Die Software setzt sich aus den Controllern \emph{Index}, \emph{Sending}, \emph{Users} und den Models \emph{Socket} sowie \emph{User} zusammen. Die Controller werden im verwendeten Framework Pages genannt und erzeugen auch das angezeigte HTML. Die Abgrenzung zwischen View und Controller findet innerhalb der Page-Klasse statt und übernimmt beide Aufgaben. Die Pages stellen das User-Interface zur Verfügung und übernehmen den Datenaustausch mit den Models.
 
 \FloatBarrier
-\subsubsection*{Die Index Klasse} ist die Startseite und wie in Abbildung \ref{fig:view_main} zu erkennen ist, ist dort nur die Navigation und eine Willkommensnachricht vorhanden. 
+\subsubsection*{Die Index Klasse} ist die Startseite und, wie in \autoref{fig:view_main} dargestellt, dort wird nur die Navigation und eine Willkommensnachricht generiert. 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewMain.png}
 	\caption{Startseite des Frontends}
 	\label{fig:view_main}
 \end{figure}
-Dies soll nur als start dienen, die eigentliche Funktionalität bieten die Klassen Sending und Users an. 
+Dies soll nur als Einstiegspunkt dienen. Die eigentliche Funktionalität bieten die Klassen \emph{Sending} und \emph{Users} an. 
 
 \FloatBarrier
-\subsubsection*{Die Users Klasse} erzeugt die Seite, auf der die aktiven und inaktiven Teilnehmer des Netzwerkes angezeigt werden (siehe Abb. \ref{fig:view_user}). 
+\subsubsection*{Die Users Klasse} erzeugt die Seite, auf der die aktiven und inaktiven Teilnehmer des Netzwerkes angezeigt werden (siehe \autoref{fig:view_user}). 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewUsers.png}
 	\caption{Übersicht über die GSM Teilnehmer}
 	\label{fig:view_user}
 \end{figure}
-Auf dieser Seite können auch die Daten der jeweiligen Benutzer angepasst werden. Das Ändern der Einstellungen ist in Abbildung \ref{fig:view_user_settings} zu erkennen.
+Auf dieser Seite können auch die Daten der jeweiligen Benutzer angepasst werden. Das Ändern der Einstellungen ist in \autoref{fig:view_user_settings} zu erkennen.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewUsersSettings.png}
 	\caption{Benutzereinstellungen}
 	\label{fig:view_user_settings}
 \end{figure}
-Es ist auf dieser Seite auch möglich Benutzer zu löschen und direkt SMS an einzelne Benutzer zu senden.
+Es ist auf dieser Seite auch möglich Benutzer zu löschen und direkt \SMS-Nachrichten an einzelne zu senden.
 
 \FloatBarrier
 \subsubsection*{Die Sending Klasse}
-ermöglicht das Senden einer Nachricht an mehrere Benutzer gleichzeitig und ist in Abbildung \ref{fig:view_sending} dargestellt.
+ermöglicht das gleichzeitige Senden einer Nachricht an mehrere Benutzer und ist in \autoref{fig:view_sending} dargestellt.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\textwidth]{\picdir FrontendViewSending.png}
-	\caption{Oberfläche zum versenden von SMS}
+	\caption{Oberfläche zum Versenden von \acs*{SMS}-Nachrichten}
 	\label{fig:view_sending}
 \end{figure}
-In der ersten Zeile wird ein Teilnehmer ausgewählt, an den gesendet werden soll, welcher mit einem Klick auf Add zur Liste der Empfänger hinzugefügt wird. Die beiden Buttons All und Active erlauben das hinzufügen aller bzw. nur der Aktiven Teilnehmer. Im unteren Feld wird die Nachricht eingegeben, welche mit Klick auf Send über das Backend an die ausgewählten Empfänger übermittelt wird.
+In der ersten Zeile wird ein Teilnehmer ausgewählt, an den gesendet werden soll, welcher mit einem Klick auf \emph{Add} zur Liste der Empfänger hinzugefügt wird. Die beiden Buttons \emph{All} und \emph{Active} erlauben das Hinzufügen aller bzw. nur der aktiven Teilnehmer. Im unteren Feld wird die Nachricht eingegeben, welche mit Klick auf \emph{Send} über das Backend an die ausgewählten Empfänger übermittelt wird.
 
 \FloatBarrier
 \subsubsection*{Die Model Klassen}
-stellen die Brücke zwischen Backend (Kap. \ref{sec:backend}) und Frontend dar. Die Angezeigen Daten werden vom Backend bereit gestellt und werden über Websockets übertragen. Websockets wurden ausgewählt, da dadurch kein vollwertiger Webserver benötigt wird und dies die Entwicklung vereinfacht. Die mit dem Backend ausgetauschten daten werden im \JSON Format übertragen. Für den Aufbau der Nachrichten siehe Kapitel \ref{subsec:json}. 
+stellen die Brücke zwischen Backend (Kap. \ref{sec:backend}) und Frontend dar. Die angezeigten Daten werden vom Backend bereit gestellt und über Websockets übertragen. Diese Übertragungsmethode wurden ausgewählt, da dadurch kein vollwertiger Webserver benötigt wird und dies die Entwicklung vereinfacht. Die mit dem Backend ausgetauschten Daten werden im \JSON-Format übertragen. Für den Aufbau der Nachrichten siehe Kapitel \ref{subsec:json}. 
 
-Die Kommunikation wird dabei von der Socket Klasse durchgeführt, die periodisch mit dem Backend Kommuniziert und die Daten akutallisiert.
-Die Socket Klasse übernimmt die grundsätzliche Kommunikation, so wie das aufbauen einer Verbindung und das Umwandeln von \JSON zu Scala Klassen beim Empfangen und umgehkehrt beim Senden. Desweiteren stellt es Events zur Verfügung, welche bei Empfangen von Daten ausgelöst werden.
-Die zweite Model-Klasse User stellt nur einen wrapper um die Socket Klasse dar, um einfachen Zugriff auf die Benutzerdaten zu ermöglichen.
+Die Kommunikation wird dabei von der Socket-Klasse durchgeführt, die periodisch mit dem Backend Kommuniziert und die Daten aktualisiert.
+Die Socket-Klasse übernimmt die grundsätzliche Kommunikation, so wie das Aufbauen einer Verbindung und das Umwandeln von \JSON zu Scala-Klassen beim Empfangen und umgekehrt beim Senden. Des Weiteren stellt es Events zur Verfügung, welche bei Empfangen von Daten ausgelöst werden.
+Die zweite Model-Klasse User stellt nur einen Wrapper um die Socket Klasse dar, um einfachen Zugriff auf die Benutzerdaten zu ermöglichen.
 
 \FloatBarrier
 \subsubsection*{Die Benutzerverwaltung}
-wurde nur Rudimentär implementiert. Der aktuelle Nutzer kann durch Auswahl dessen unter Login in der Navigation (siehe Abb. \ref{fig:view_main}) gewählt werden. Auf eine komplexere Verwaltung mit Passwörten und Rollen wurde verzichtet.
+wurde nur rudimentär implementiert. Der aktuelle Nutzer kann durch Auswahl dessen unter Login in der Navigation (siehe \autoref{fig:view_main}) gewählt werden. Auf eine komplexere Verwaltung mit Passwörtern und Rollen wurde verzichtet.
