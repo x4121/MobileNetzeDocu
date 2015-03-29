@@ -1,7 +1,7 @@
 \section{Aufgabenstellung}
 \label{sec:aufgabe}
 
-Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetz mit GSM.
+Im Rahmen der Blockveranstaltung ``Mobile Netze'' im Sommersemester 2015 bei Herrn Wischhof sollte eine praktische Anwendung bezüglich GSM-, UMTS- oder WLAN-Netzen auf echter Hardware umgesetzt werden. Die von uns gewählte Aufgabe war das Einrichten eines fakultätseigenen Mobilfunknetzes mit GSM.
 Zur Verfügung stand uns dafür als \SDR ein \USRP von \emph{Ettus Research}\footnote{\url{http://www.ettus.com/content/files/07495_Ettus_N200-210_DS_Flyer_HR_1.pdf}} auf welchem wir mit \OpenBTS ein \GSM-Netz aufsetzten.
 
 \subsection{Projektumfang}
@@ -42,31 +42,37 @@ Im Detail sind diese:
 \section{OpenBTS}
 \label{sec:openbts}
 
-\OpenBTS\footnote{\url{http://openbts.org}} ist ein open source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
+\OpenBTS\footnote{\url{http://openbts.org}} ist ein Open Source Softwareprojekt mit dem sich auf einem \SDR, wie dem von uns verwendeten \USRP 2, \GSM- oder auch \UMTS-Netze betreiben lassen.
 
 \subsection{Installation}
 \label{sec:installation}
-
-Zur Installation und initialen Einrichtung von \OpenBTS haben wir uns weitestgehend an die Anleitung des \OpenBTS-Git-Repository\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} gehalten.\\Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief, mussten wir diesen zunächst neu aufsetzen. Anschließend haben wir Git installiert und das Git-Repository mit allen
-Abhängigkeiten auf den Laborrechner geklont, den aktuellen Branch ausgewählt und für unsere \USRP kompiliert.\\Während dem Kompilieren fiel auf, dass anscheinend nicht alle benötigten Treiber mit dem Repository geladen und installiert werden. Dies ließ sich aber auch durch eine kurze Google-Suche beheben\footnote{\url{http://code.ettus.com/redmine/ettus/projects/uhd/wiki/UHD_Linux}}.
+Da die Ubuntu-Version auf den Laborrechnern bereits sehr stark veraltet war und durch fehlerhafte Konfigurationen nicht mehr sehr stabil lief (Probleme mit Netzwerkadaptern, gelegentliches und anscheinend grundloses Abstürzen des Betriebssystems, Konflikte mit zuvor installieren Softwareversionen) mussten wir diesen zunächst neu aufsetzen.\\
+Nach vielen misslungenen Versuchen \OpenBTS nach diversen, im Internet kursierenden, Anleitungen zu installieren, sind wir auf das Projekt-Wiki\footnote{\url{https://github.com/RangeNetworks/dev/wiki}} im offiziellen Git-Repository von \OpenBTS gestoßen.
+Bis auf einige kleine Fehler oder Auslassungen lies sich damit \OpenBTS sehr schnell und einfach installieren.
+Zur Installation und initialen Einrichtung haben wir uns deshalb weitestgehend an diese Anleitung gehalten.\\Zuerst installierten wir Git und klonten das Git-Repository mit allen Ab\-hän\-gig\-keiten auf den Laborrechner, wählten den aktuellen Branch aus und kompilierten diese für unsere \USRP.\\
+Während dem Kompilieren fiel auf, dass anscheinend nicht alle benötigten Treiber mit dem Repository geladen und installiert werden. Dies ließ sich durch eine kurze Google-Suche beheben\footnote{\url{http://code.ettus.com/redmine/ettus/projects/uhd/wiki/UHD_Linux}}.
 
 \begin{lstlisting}[language=bash]
 sudo apt-get install git
+
 git clone http://github.com/RangeNetworks/dev
 cd dev
 ./clone.sh
 ./switchto.sh master
+
 sudo bash -c 'echo "deb \
 http://files.ettus.com/binaries/uhd/
 repo/uhd/ubuntu/`lsb_release \
 -cs` `lsb_release -cs` main" >
 /etc/apt/sources.list.d/ettus.list'
+
 sudo apt-get update
 sudo apt-get install -t `lsb_release -cs` uhd
+
 ./build.sh N210
 \end{lstlisting}
 
-Nachdem die einzelnen Komponenten kompiliert wurden, konnte man diese und die dazu benötigten Abhängigkeiten auf dem Laborrechner installieren.
+Nachdem die einzelnen Komponenten kompiliert wurden, konnte man diese auf dem Laborrechner installieren.
 
 \begin{lstlisting}
 cd BUILD/*
@@ -74,7 +80,7 @@ sudo dpkg -i *.deb
 sudo apt-get -f install
 \end{lstlisting}
 
-Abschließend musste man nur noch die einzelnen Komponenten starten. Da die Komponenten in Upstart eingetragen wurden, konnte man auch einfach den Laborrechner neustarten.
+Abschließend musste man nur noch die einzelnen Komponenten starten. Dies erreichte man mit dem Befehls-Schema \inlinecode{service SERVICE-NAME start}. Da die Komponenten in Upstart eingetragen wurden, konnte man auch einfach den Laborrechner neustarten.
 
 \subsection{Konfiguration}
 \label{sec:konfiguration}

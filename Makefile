@@ -1,7 +1,7 @@
 UMLDIR = pics
 PDFARGS = pdflatex -interactive=nonstopmode
 
-.PHONY: Ausarbeitung.pdf all clear
+.PHONY: Ausarbeitung.pdf all clean
 
 all: uml Ausarbeitung.pdf
 
@@ -17,6 +17,6 @@ Ausarbeitung.pdf: Ausarbeitung.tex
 uml:
 	cd $(UMLDIR) && $(MAKE)
 
-clear:
+clean:
 	latexmk -CA
-	cd $(UMLDIR) && $(MAKE) clear
+	cd $(UMLDIR) && $(MAKE) clean
